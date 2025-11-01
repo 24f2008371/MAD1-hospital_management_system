@@ -1,54 +1,122 @@
-/* General Body Styles */
+/*
+    MediCare - Main Stylesheet
+    Purpose: Defines styles for both the login and main landing pages.
+*/
+
+/* Sets the flawless, fixed gradient for the entire page */
+html {
+    min-height: 100vh;
+    background-image: linear-gradient(45deg, #ff2a00 0%, #cc00ff 50%, #001aff 100%);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+/* =================================== */
+/* 1. Global & Body Styles             */
+/* =================================== */
+
+/* Default body style, primarily for the login page */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #1d2671; /* Fallback color */
-    background-image: linear-gradient(45deg, #ff2a00 0%, #ff009d 50%, #001aff 100%);
+    background-color: transparent;
     min-height: 100vh;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    overflow: hidden; /* Hide overflow from decorative shapes */
-    position: relative;
+    overflow: hidden;
 }
 
-/* Glassmorphism Card Effect */
+/* Override body styles specifically for the multi-section landing page */
+body.landing-page {
+    display: block; 
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: transparent;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* =================================== */
+/* 2. Reusable Components              */
+/* =================================== */
+
+/* 2.1 Glassmorphism Card Effect */
 .glass-card {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
     border-radius: 1.5rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     z-index: 10;
 }
 
-.card-header-custom {
-    border-bottom: 0;
-    padding-bottom: 0;
+/* 2.2 Buttons (Primary & Secondary) */
+.btn-login {
+    color: #4a00e0;
+    background: #fff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-login:hover,
+.btn-login:focus {
+    color: #fff;
+    background: #4a00e0;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(74, 0, 224, 0.3);
+}
+
+.btn-register {
+    display: block;
     text-align: center;
-}
-
-.logo-icon {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
 }
 
-/* Custom Form Input Group */
+.btn-register:hover,
+.btn-register:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-login:active, .btn-register:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 2.3 Form Elements */
 .form-control-glass {
     background: rgba(255, 255, 255, 0.15) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     color: white !important;
     border-radius: 0.75rem !important;
-    padding-left: 3rem; /* Space for the icon */
+    padding-left: 3rem;
 }
 
 .form-control-glass::placeholder {
@@ -71,114 +139,171 @@ body {
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* Custom Button */
-.btn-login {
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
+
+/* =================================== */
+/* 3. Landing Page Sections            */
+/* =================================== */
+
+/* 3.1 Navigation Bar */
+.navbar.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    width: 90%;
+    margin: 1rem auto 0 auto;
+}
+
+.navbar .navbar-brand span,
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #fff !important;
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
     font-weight: 500;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-.btn-login:hover {
-    background: white;
-    color: #dd2476; /* Vibrant pink text */
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(221, 36, 118, 0.25); /* Pink glow */
-}
-
-.forgot-link {
+.navbar .btn {
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
 }
 
-.forgot-link:hover {
-    color: white;
-    text-decoration: underline;
-}
-
-a{
-    text-decoration: none;
-}
-
-/* === New Primary Login Button (Bold White) === */
-.btn-login {
-    /* --- Style --- */
-    color: #4a00e0; /* Vibrant purple text (from your background) */
-    background: #fff; /* Solid white background */
-    border: none;
-    
-    /* --- Sizing & Font --- */
-    padding: 0.7rem 1.2rem;
-    font-size: 1rem;
-    font-weight: 700; /* Bold text */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    
-    /* --- Effects --- */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out; /* Animation */
-}
-
-.btn-login:hover,
-.btn-login:focus {
-    /* --- Hover: Invert Effect --- */
-    color: #fff;
-    background: #4a00e0; /* Match the original text color */
-    
-    /* --- Hover: Lift & Glow --- */
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(74, 0, 224, 0.3); /* Purple glow */
-}
-
-.btn-login:active {
-    transform: translateY(0); /* Press-down effect */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-
-/* === Secondary Register Button (Subtle Glass) === */
-/* This style works well, so we'll keep it */
-.btn-register {
-    /* --- Style --- */
-    display: block; /* Needed for <a> tag */
+/* 3.2 Hero Section */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    color: #fff; /* White text */
-    background: rgba(255, 255, 255, 0.08); /* Faint glass */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
-    backdrop-filter: blur(4px);
-    
-    /* --- Sizing & Font --- */
-    padding: 0.7rem 1.2rem;
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    
-    /* --- Effects --- */
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out; /* Animation */
+    padding: 120px 1rem 60px 1rem;
+    text-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
 }
 
-.btn-register:hover,
-.btn-register:focus {
-    /* --- Hover: Get brighter --- */
-    background: rgba(255, 255, 255, 0.15); 
-    border-color: rgba(255, 255, 255, 0.6); 
-    
-    /* --- Hover: Gentle Lift & Glow --- */
-    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2); 
-    transform: translateY(-2px); 
+.hero-section .col-lg-10 {
+    width: 100%;
 }
 
-.btn-register:active {
-    transform: translateY(0); /* Press-down effect */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.hero-cta-buttons .btn {
+    margin: 0.5rem;
+}
+
+/* 3.3 Features Section */
+.features-section {
+    padding: 6rem 1rem;
+}
+
+.features-section .text-white-80 {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.25rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    height: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* 3.4 Footer Section */
+.footer-section {
+    padding: 3rem 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-social a {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    margin-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.footer-social a:hover {
+    color: #fff;
+}
+
+/* 3.5 About Us Section */
+.about-section {
+    padding: 3rem 1rem;
+    color: white;
+}
+
+.about-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(30px);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    z-index: 10;
+}
+
+.about-values li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.about-values .icon-circle {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    margin-right: 1.25rem;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.about-values .icon-circle i {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.about-values span {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+
+/* =================================== */
+/* 4. Login Page Specifics             */
+/* =================================== */
+
+.card-header-custom {
+    border-bottom: 0;
+    padding-bottom: 0;
+    text-align: center;
+}
+
+.logo-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }

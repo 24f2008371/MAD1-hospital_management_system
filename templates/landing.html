@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicare</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body class="landing-page">
+
+    <nav class="navbar navbar-expand-lg glass-card navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
+                <span class="fw-bold ms-2">MediCare</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex ms-lg-3">
+                    <a href="/login" class="btn btn-register me-2">Login</a>
+                    <a href="/register" class="btn btn-login">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <header class="hero-section">
+        <div class="container text-center text-white">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <h1 class="display-2 fw-bold mb-4">Modern Healthcare Management. Simplified.</h1>
+                    <p class="lead mb-5">
+                        A seamless, all-in-one platform for managing patient records,
+                        appointments, and billing with unparalleled efficiency.
+                    </p>
+                    <div class="hero-cta-buttons"
+                        style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
+
+                        <a href="/register" class="btn btn-login"
+                            style="display: inline-flex; align-items: center; padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+                            Get Started Now
+                            <i class="fa-solid fa-rocket ms-2"></i> </a>
+
+                        <a href="#features" class="btn btn-register"
+                            style="display: inline-flex; align-items: center; padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+                            Learn More
+                            <i class="fa-solid fa-circle-info ms-2"></i> </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <section class="features-section" id="features" style="color: white;">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-8">
+                    <h2 class="text-white fw-bold">Everything you need. All in one place.</h2>
+                    <p class="text-white-80">Our system is designed to streamline every aspect of your clinical
+                        workflow.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <h3 class="fw-bold fs-4 mb-3">Smart Scheduling</h3>
+                        <p>Easily manage appointments, doctor availability, and send automated reminders to patients.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+                        <h3 class="fw-bold fs-4 mb-3">Patient Records</h3>
+                        <p>Access comprehensive, secure digital patient histories in seconds. Fully HIPAA compliant.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <h3 class="fw-bold fs-4 mb-3">Secure Billing</h3>
+                        <p>Automate your billing, invoicing, and payment processing with our integrated financial
+                            module.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-40 col-xl-16">
+                    <div class="about-card p-4 p-md-5">
+                        <div class="row align-items-center g-4 g-lg-5">
+
+                            <div class="col-lg-6">
+                                <h2 class="fw-bold display-6 mb-2">OUR MISSION IS TO REVOLUTIONIZE PATIENT CARE</h2>
+                                <p class="text-white-80 mb-4">
+                                    We believe that technology should simplify, not complicate.
+                                    MediCare was built by doctors and engineers to create a seamless,
+                                    intelligent, and secure platform that puts patient well-being first.
+                                </p>
+
+                                <ul class="list-unstyled about-values">
+                                    <li class="mb-3">
+                                        <div class="icon-circle">
+                                            <i class="fa-solid fa-heart-pulse"></i>
+                                        </div>
+                                        <span class="fs-5 fw-bold">Built on Compassion</span>
+                                    </li>
+                                    <li class="mb-3">
+                                        <div class="icon-circle">
+                                            <i class="fa-solid fa-shield-halved"></i>
+                                        </div>
+                                        <span class="fs-5 fw-bold">Driven by Security</span>
+                                    </li>
+                                    <li>
+                                        <div class="icon-circle">
+                                            <i class="fa-solid fa-lightbulb"></i>
+                                        </div>
+                                        <span class="fs-5 fw-bold">Focused on Innovation</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/kz7/fqd/xhu/Screenshot%202025-11-01%20225936.jpg" class="img-fluid rounded-3" alt="Doctor using a tablet with patient data">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2025 HealthSys. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end footer-social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
