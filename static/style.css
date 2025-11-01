@@ -1,0 +1,184 @@
+/* General Body Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #1d2671; /* Fallback color */
+    background-image: linear-gradient(45deg, #ff2a00 0%, #ff009d 50%, #001aff 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: hidden; /* Hide overflow from decorative shapes */
+    position: relative;
+}
+
+/* Glassmorphism Card Effect */
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    z-index: 10;
+}
+
+.card-header-custom {
+    border-bottom: 0;
+    padding-bottom: 0;
+    text-align: center;
+}
+
+.logo-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Custom Form Input Group */
+.form-control-glass {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    border-radius: 0.75rem !important;
+    padding-left: 3rem; /* Space for the icon */
+}
+
+.form-control-glass::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.form-control-glass:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.input-group-text-custom {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    z-index: 10;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Custom Button */
+.btn-login {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-weight: 500;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    background: white;
+    color: #dd2476; /* Vibrant pink text */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(221, 36, 118, 0.25); /* Pink glow */
+}
+
+.forgot-link {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
+
+.forgot-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+a{
+    text-decoration: none;
+}
+
+/* === New Primary Login Button (Bold White) === */
+.btn-login {
+    /* --- Style --- */
+    color: #4a00e0; /* Vibrant purple text (from your background) */
+    background: #fff; /* Solid white background */
+    border: none;
+    
+    /* --- Sizing & Font --- */
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 700; /* Bold text */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    
+    /* --- Effects --- */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out; /* Animation */
+}
+
+.btn-login:hover,
+.btn-login:focus {
+    /* --- Hover: Invert Effect --- */
+    color: #fff;
+    background: #4a00e0; /* Match the original text color */
+    
+    /* --- Hover: Lift & Glow --- */
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(74, 0, 224, 0.3); /* Purple glow */
+}
+
+.btn-login:active {
+    transform: translateY(0); /* Press-down effect */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* === Secondary Register Button (Subtle Glass) === */
+/* This style works well, so we'll keep it */
+.btn-register {
+    /* --- Style --- */
+    display: block; /* Needed for <a> tag */
+    text-align: center;
+    color: #fff; /* White text */
+    background: rgba(255, 255, 255, 0.08); /* Faint glass */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
+    backdrop-filter: blur(4px);
+    
+    /* --- Sizing & Font --- */
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    
+    /* --- Effects --- */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out; /* Animation */
+}
+
+.btn-register:hover,
+.btn-register:focus {
+    /* --- Hover: Get brighter --- */
+    background: rgba(255, 255, 255, 0.15); 
+    border-color: rgba(255, 255, 255, 0.6); 
+    
+    /* --- Hover: Gentle Lift & Glow --- */
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2); 
+    transform: translateY(-2px); 
+}
+
+.btn-register:active {
+    transform: translateY(0); /* Press-down effect */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
