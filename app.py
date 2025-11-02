@@ -6,6 +6,13 @@ app = None
 
 def create_app():
     app = Flask(__name__)
+
+    # --- THIS IS THE FIX ---
+    # You MUST set a secret key to use flash() and sessions
+    app.secret_key = 'hello'
+    # --- END OF FIX ---
+
+    # ... rest of your app.py/controllers.py code ...
     app.debug = True 
     # All changes will be incorporated while app is running and shows errors
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hospital.sqlite3" # 3 database

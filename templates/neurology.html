@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCare - Patient Dashboard</title>
+    <title>MediCare - Department Details</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +18,12 @@
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
     <style>
+        /*
+            MediCare - Main Stylesheet
+            Purpose: Defines styles for all application pages.
+        */
 
+        /* Sets the flawless, fixed gradient for the entire page */
         html {
             min-height: 100vh;
             background-image: linear-gradient(45deg, #ff2a00 0%, #cc00ff 50%, #001aff 100%);
@@ -133,14 +138,22 @@
             border-radius: 0.75rem !important;
             padding-left: 3rem;
         }
-
-        .form-control-glass::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+        
+        .form-control-admin {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+        .form-control-admin::placeholder {
+            color: #6c757d;
         }
 
-        .form-control-glass:focus {
-            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.2) !important;
+        .form-label-admin {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
         }
 
         .input-group-text-custom {
@@ -161,7 +174,6 @@
         /* 3.1 Main Navbar (Admin/Patient) */
         .app-navbar {
             background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.07);
             backdrop-filter: blur(30px);
             border-radius: 1rem;
             width: 90%; /* Keeping this at 90% as requested */
@@ -183,7 +195,6 @@
         .app-navbar .nav-link:hover,
         .app-navbar .nav-link.active {
             color: #fff !important;
-            text-decoration: none;
         }
 
         .app-navbar .btn {
@@ -243,8 +254,48 @@
             color: #fff;
             font-weight: 600;
         }
+        
+        /* Header Bar for Titles */
+        .admin-title {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .admin-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
 
-        /* 3.4 Dashboard List (For Departments) */
+        .btn-back-icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            color: #fff;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        .btn-back-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        
+        .header-spacer {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* 3.4 Dashboard List (For Doctors) */
         .dashboard-list {
             list-style: none;
             padding-left: 0;
@@ -282,54 +333,26 @@
             transition: all 0.2s ease;
         }
 
-        /* 3.5 "Glass" Table Style */
-        .table-glass {
-            background-color: rgba(0, 0, 0, 0.15);
-            color: white;
-            border-radius: 0.75rem;
-            overflow: hidden; /* Ensures border-radius applies to table corners */
-        }
-        .table-glass th {
-            background-color: rgba(0, 0, 0, 0.2);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.2) !important;
-            font-weight: 600;
-        }
-        .table-glass td,
-        .table-glass th {
-            border-color: rgba(255, 255, 255, 0.1) !important;
-            vertical-align: middle;
-        }
-        .table-glass tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        /* 3.6 Dashboard Button Styles */
-        .btn-warning {
-            background: rgb(255, 213, 0);
+        .btn-view {
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            color: rgb(0, 0, 0);
+            color: white;
+            padding: 0.5rem 1rem !important; /* Make buttons slightly larger */
+            font-size: 0.9rem !important;
+            font-weight: 700 !important;
         }
-        .btn-warning:hover {
+        .btn-view:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
             color: white;
             transform: scale(1.05);
         }
-
-        .btn-cancel {
-            background-color: #dc3545;
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            padding: 0.3rem 0.75rem;
-            border: none;
-        }
-        .btn-cancel:hover {
-            background-color: #b02a37;
-            color: white;
-            transform: scale(1.05);
+        
+        .overview-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+            margin-bottom: 2.5rem; /* Space between overview and list */
         }
         
     </style>
@@ -344,7 +367,7 @@
             <!-- Logo -->
             <a class="navbar-brand" href="#">
                 <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
-                <span class="fw-bold ms-2">MediCare Patient</span>
+                <span class="fw-bold ms-2">MediCare</span>
             </a>
             
             <!-- Navbar Toggler -->
@@ -354,13 +377,13 @@
             
             <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="patientNav">
-                <div class="ms-auto d-flex align-items-center">
-                    <h1 class="text-white h3 fw-bold">Welcome, {{this_user.username}}!</h1>
+                <div class="ms-auto d-flex align-items: center">
+                    <span class="welcome-text d-none d-lg-block">Welcome Pqrst</span>
                     
                     <!-- Text Links -->
                     <ul class="navbar-nav patient-nav-links me-lg-3">
-                        <li class="nav-item"><a href="/edit_profile" class="nav-link">Edit Profile</a></li>
-                        <li class="nav-item"><a href="/patient_history" class="nav-link">History</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Edit Profile</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">History</a></li>
                     </ul>
 
                     <!-- Logout Button (now separate and with icon) -->
@@ -372,81 +395,60 @@
         </div>
     </nav>
 
-    <!-- Main Dashboard Content -->
+    <!-- Main Department Details Content -->
     <main class="container-fluid p-4 p-md-5">
 
-        <!-- Main Title -->
-        <h1 class="admin-title" style="color: #fff; font-weight: 700; margin-bottom: 2rem;">Patients' Dashboard</h1>
+        <!-- Main Title Bar -->
+        <div class="admin-header-bar">
+            <!-- This "Back" button would link back to the patient dashboard -->
+            <a href="/patient" class="btn-back-icon"><i class="fa-solid fa-arrow-left"></i></a>
+            
+            <h1 class="admin-title">Department of Neurology</h1>
 
-        <!-- Dashboard Widgets -->
-        <div class="row">
+            <!-- Invisible spacer to balance the layout -->
+            <div class="header-spacer"></div>
+        </div>
 
-            <!-- Left Column (Departments) -->
-            <div class="col-lg-5">
-
-                <!-- Departments -->
+        <!-- Department Details Card -->
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-md-11">
                 <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-hospital-user me-2"></i> Departments</h3>
-                    </div>
+                    
+                    <!-- Overview Section -->
+                    <h2 class="fw-bold h3 mb-3" style="color: #fff;">Overview</h2>
+                    <p class="overview-text">
+                        The Neurology Department in a hospital is dedicated to the diagnosis, treatment, and care of patients with cancer. It houses a team of specialized doctors, such as medical oncologists, surgical oncologists, and radiation oncologists, who work together to provide comprehensive cancer care.
+                    </p>
+
+                    <!-- Doctors' List -->
+                    <h2 class="fw-bold h3 mb-3" style="color: #fff;">Doctors' List</h2>
                     
                     <ul class="dashboard-list">
                         <li class="dashboard-list-item">
-                            <span class="dashboard-list-item-name">Cardiology</span>
-                            <button class="btn btn-warning">View Details</button>
+                            <span class="dashboard-list-item-name">Dr. Abcde</span>
+                            <div class="buttons-group d-flex gap-2">
+                                <button class="btn btn-view">Check Availability</button>
+                                <button class="btn btn-view">View Details</button>
+                            </div>
                         </li>
                         <li class="dashboard-list-item">
-                            <span class="dashboard-list-item-name">Oncology</span>
-                            <button class="btn btn-warning">View Details</button>
+                            <span class="dashboard-list-item-name">Dr. Pqrst</span>
+                            <div class="buttons-group d-flex gap-2">
+                                <button class="btn btn-view">Check Availability</button>
+                                <button class="btn btn-view">View Details</button>
+                            </div>
                         </li>
                         <li class="dashboard-list-item">
-                            <span class="dashboard-list-item-name">General</span>
-                            <button class="btn btn-warning">View Details</button>
-                        </li>
-                         <li class="dashboard-list-item">
-                            <span class="dashboard-list-item-name">Neurology</span>
-                            <button class="btn btn-warning">View Details</button>
+                            <span class="dashboard-list-item-name">Dr. Mnop</span>
+                            <div class="buttons-group d-flex gap-2">
+                                <button class="btn btn-view">Check Availability</button>
+                                <button class="btn btn-view">View Details</button>
+                            </div>
                         </li>
                     </ul>
+
                 </div>
             </div>
-
-            <!-- Right Column (Appointments) -->
-            <div class="col-lg-7">
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h3>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-glass mb-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">Doctor Name</th>
-                                    <th scope="col">Department</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Time</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1001.</th>
-                                    <td>Dr. Abcde</td>
-                                    <td>General</td>
-                                    <td>24/09/2025</td>
-                                    <td>08 AM - 12 PM</td>
-                                    <td><button class="btn btn-cancel">Cancel</button></td>
-                                </tr>
-                                <!-- Add more appointments as needed -->
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
         </div> <!-- /row -->
 
     </main>
@@ -455,4 +457,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

@@ -14,12 +14,12 @@ def login():
         username= request.form.get("username")
         password= request.form.get("password")
         this_user= User.query.filter_by(username=username).first()
-        if this_user:
+        if this_user: # if this user exists
             if this_user.password == password:
                 if this_user.type == "admin":
-                    return render_template("admin_dash.html")
+                    return redirect("/admin")
                 else:
-                    return render_template("patient_dash.html")
+                    return render_template("patient_dash.html", username=username,this_user=this_user)
             else:
                 return render_template("incorrect_p.html")
         else:
@@ -32,9 +32,9 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         this_user = User.query.filter_by(username=username).first()
-        if this_user:
+        if this_user: # if this user exists
             return render_template("already_exists.html")
-        else:
+        else: # if this user does not exist
             new_user = User(username=username, password=password)
             db.session.add(new_user)
             db.session.commit()
@@ -47,3 +47,8 @@ def register():
 def admin_dash():
     this_user = User.query.filter_by(type="admin").first()
     return render_template("admin_dash.html", this_user = this_user)
+
+@app.route("/patient")
+def patient_dash():
+    this_user = User.query.filter_by(type="patient").first()
+    return render_template("patient_dash.html", this_user = this_user)
