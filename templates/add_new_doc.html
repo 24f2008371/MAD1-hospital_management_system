@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCare - Admin Dashboard</title>
+    <title>MediCare - Add Doctor</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -430,6 +430,9 @@
         .btn-create {
             background-color: #198754;
             color: white;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+            padding: 0.75rem 1.5rem !important;
         }
         .btn-create:hover {
             background-color: #157347;
@@ -508,6 +511,14 @@
             width: 100%;
         }
 
+        /* NEW STYLES FOR ADD FORM */
+        .form-label-admin {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+
     </style>
 </head>
 
@@ -515,7 +526,7 @@
 <body class="landing-page">
 
     <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg admin-navbar navbar-dark sticky-top" style="width: 93%; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);">
+    <nav class="navbar navbar-expand-lg admin-navbar navbar-dark sticky-top" style="width: 90%;">
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand" href="#">
@@ -532,7 +543,10 @@
             <div class="collapse navbar-collapse" id="adminNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Dashboard</a>
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Add Doctor</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Settings</a>
@@ -545,136 +559,61 @@
         </div>
     </nav>
 
-    <!-- Main Dashboard Content -->
-    <main class="container-fluid p-4 p-md-5">
+    <!-- Main Add Doctor Content -->
+    <main class="container p-4 p-md-5">
 
         <!-- Main Title -->
-        <h1 class="admin-title">Admin Dashboard</h1>
+        <h1 class="admin-title text-center">Add a New Doctor</h1>
 
-        <!-- Search Bar -->
-        <div class="glass-card search-bar" style="display: flex; justify-content: space-between;">
-            <h1 class="h2 mb-0">Welcome Admin!</h1><br>
-            <form class="d-flex w-50">
-                <input class="form-control me-2 form-control-admin" type="search" placeholder="Search for doctor, patient, department..." aria-label="Search">
-                <button class="btn btn-login" type="submit">Search</button>
-            </form>
+        <!-- Add Doctor Form Card -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="glass-card content-card">
+                    <form>
+                        <!-- Fullname -->
+                        <div class="mb-3">
+                            <label for="docFullname" class="form-label form-label-admin">Fullname</label>
+                            <input type="text" class="form-control form-control-admin" id="docFullname" placeholder="Enter full name" required>
+                        </div>
+
+                        <!-- Specialization/Department -->
+                        <div class="mb-3">
+                            <label for="docSpecialization" class="form-label form-label-admin">Specialization/Department</label>
+                            <input type="text" class="form-control form-control-admin" id="docSpecialization" placeholder="e.g., Cardiology, Neurology" required>
+                        </div>
+
+                        <!-- Experience -->
+                        <div class="mb-3">
+                            <label for="docExperience" class="form-label form-label-admin">Experience (years)</label>
+                            <input type="number" class="form-control form-control-admin" id="docExperience" placeholder="Enter a number" required>
+                        </div>
+                        
+                        <!-- Phone Number -->
+                        <div class="mb-3">
+                            <label for="docPhone" class="form-label form-label-admin">Phone Number</label>
+                            <input type="tel" class="form-control form-control-admin" id="docPhone" placeholder="Enter phone number">
+                        </div>
+                        
+                        <!-- Email Address -->
+                        <div class="mb-3">
+                            <label for="docEmail" class="form-label form-label-admin">Email Address</label>
+                            <input type="email" class="form-control form-control-admin" id="docEmail" placeholder="Enter email" required>
+                        </div>
+
+                        <!-- Assign Password -->
+                        <div class="mb-3">
+                            <label for="docPassword" class="form-label form-label-admin">Assign Password</label>
+                            <input type="password" class="form-control form-control-admin" id="docPassword" placeholder="Create a secure password" required>
+                        </div>
+
+                        <!-- Create Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-create"><i class="fa-solid fa-plus me-1"></i> Create Doctor</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <!-- Dashboard Widgets -->
-        <div class="row">
-
-            <!-- Left Column (Doctors & Patients) -->
-            <div class="col-lg-7">
-
-                <!-- Registered Doctors -->
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-user-doctor me-2"></i> Registered Doctors</h3>
-                        <button class="btn btn-create"><i class="fa-solid fa-plus me-1"></i> Create New</button>
-                    </div>
-                    
-                    <ul class="admin-list">
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Dr. Abcde</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
-                            </div>
-                        </li>
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Dr. Pqrst</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
-                            </div>
-                        </li>
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Dr. Xyz</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Registered Patients -->
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-user-injured me-2"></i> Registered Patients</h3>
-                    </div>
-                    
-                    <ul class="admin-list">
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Mr. Abcde</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
-                            </div>
-                        </li>
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Miss. Pqrst</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Right Column (Appointments) -->
-            <div class="col-lg-5">
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h3>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-glass mb-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">Patient</th>
-                                    <th scope="col">Doctor</th>
-                                    <th scope="col">Department</th>
-                                    <th scope="col">History</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1001.</th>
-                                    <td>Mr. Abcde</td>
-                                    <td>Dr. Pqrst</td>
-                                    <td>Cardiology</td>
-                                    <td><button class="btn btn-view">View</button></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1002.</th>
-                                    <td>Miss. Pqrst</td>
-                                    <td>Dr. Abcde</td>
-                                    <td>Neurology</td>
-                                    <td><button class="btn btn-view">View</button></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1003.</th>
-                                    <td>Mr. Lmnop</td>
-                                    <td>Dr. Xyz</td>
-                                    <td>Orthopedic</td>
-                                    <td><button class="btn btn-view">View</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </div> <!-- /row -->
 
     </main>
 

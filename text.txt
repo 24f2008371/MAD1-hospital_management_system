@@ -1,0 +1,47 @@
+# to create database
+python shell (by typing python in cmd)
+>>> from app import *
+>>> db.create_all()
+
+CRUD OPERATIONS**
+
+# create record: 🥰
+>>> from app import *
+>>> user1 = User(username="Admin123",email = "admin@user.com",password="1234",type="admin")     
+>>> db.session.add(user1)
+>>> db.session.commit()
+
+# to read record: 🥰
+>>> users=User.query.all()
+>>> users
+[<User 1>, <User 2>]
+
+>>> user1
+<User 1>
+>>> user1.username
+'Admin123'
+>>> user1.password
+'1234'
+>>> user1.email
+'admin@user.com'
+
+# to update record: 🥰
+>>> from app import *
+>>> user = User.query.filter_by(username="Yash").first()
+>>> user.username="Ridhi"
+>>> user.email="ridhi@user.com"
+>>> db.session.commit()
+
+# to delete record: 🥰
+>>> from app import *
+>>> user1 = User.query.filter_by(username="Admin123").first()
+>>> db.session.delete(user1)
+>>> db.session.commit()
+
+# to come out of the shell: 😀
+>>> exit()
+
+# to make changes in database
+- delete file from instance folder
+- recreate database using the command
+- run the code

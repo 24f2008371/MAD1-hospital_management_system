@@ -8,7 +8,7 @@ def create_app():
     app = Flask(__name__)
     app.debug = True 
     # All changes will be incorporated while app is running and shows errors
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ecard.sqlite3" # 3 database
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hospital.sqlite3" # 3 database
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False # Tracks Changes
     db.init_app(app) # 3 database 
     app.app_context().push() # runtime error if not using this, brings everything under context of flask app
