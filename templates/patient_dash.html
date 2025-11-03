@@ -311,8 +311,8 @@
             color: rgb(0, 0, 0);
         }
         .btn-warning:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(226, 226, 226, 0.916);
+            border-color: rgba(0, 0, 0, 0.5);
             color: white;
             transform: scale(1.05);
         }
@@ -354,8 +354,8 @@
             
             <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="patientNav">
-                <div class="ms-auto d-flex align-items-center">
-                    <h1 class="text-white h3 fw-bold">Welcome, {{this_user.username}}!</h1>
+                <div class="ms-auto d-flex flex-wrap align-items-center justify-content-center">
+                    <h2 class="welcome-text d-none d-lg-block">Welcome {{this_user.username}}!</h2>
                     
                     <!-- Text Links -->
                     <ul class="navbar-nav patient-nav-links me-lg-3">
@@ -393,19 +393,19 @@
                     <ul class="dashboard-list">
                         <li class="dashboard-list-item">
                             <span class="dashboard-list-item-name">Cardiology</span>
-                            <button class="btn btn-warning">View Details</button>
+                            <button class="btn btn-warning"><a href="/cardiology" style="color: black;">View Details</a></button>
                         </li>
                         <li class="dashboard-list-item">
                             <span class="dashboard-list-item-name">Oncology</span>
-                            <button class="btn btn-warning">View Details</button>
+                            <button class="btn btn-warning"><a href="/oncology" style="color: black;">View Details</a></button>
                         </li>
                         <li class="dashboard-list-item">
                             <span class="dashboard-list-item-name">General</span>
-                            <button class="btn btn-warning">View Details</button>
+                            <button class="btn btn-warning"><a href="/general" style="color: black;">View Details</a></button>
                         </li>
                          <li class="dashboard-list-item">
                             <span class="dashboard-list-item-name">Neurology</span>
-                            <button class="btn btn-warning">View Details</button>
+                            <button class="btn btn-warning"><a href="/neurology" style="color: black;">View Details</a></button>
                         </li>
                     </ul>
                 </div>

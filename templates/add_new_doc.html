@@ -8,12 +8,12 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
@@ -50,7 +50,7 @@
 
         /* Override body styles specifically for the multi-section landing page */
         body.landing-page {
-            display: block; 
+            display: block;
             padding: 0;
             overflow-y: auto;
             overflow-x: hidden;
@@ -125,7 +125,8 @@
             transform: translateY(-2px);
         }
 
-        .btn-login:active, .btn-register:active {
+        .btn-login:active,
+        .btn-register:active {
             transform: translateY(0);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
@@ -167,6 +168,7 @@
         /* 3.1 Navigation Bar */
         .navbar.glass-card {
             background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.07);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 1rem;
@@ -328,7 +330,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        
+
         /* =================================== */
         /* 5. ADMIN DASHBOARD STYLES (NEW)     */
         /* =================================== */
@@ -348,14 +350,14 @@
             color: #fff;
             font-weight: 700;
             margin-bottom: 2rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .search-bar {
             padding: 1.5rem 2rem;
             margin-bottom: 2rem;
         }
-        
+
         /* Custom form for admin: light bg, dark text */
         .form-control-admin {
             background: rgba(255, 255, 255, 0.9);
@@ -364,6 +366,7 @@
             border-radius: 0.5rem;
             padding: 0.75rem 1rem;
         }
+
         .form-control-admin::placeholder {
             color: #6c757d;
         }
@@ -405,6 +408,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
+
         .admin-list-item:hover {
             background: rgba(0, 0, 0, 0.25);
             border-color: rgba(255, 255, 255, 0.2);
@@ -415,7 +419,7 @@
             font-weight: 500;
             font-size: 1.1rem;
         }
-        
+
         .admin-list-item .btn {
             font-size: 0.8rem;
             padding: 0.3rem 0.75rem;
@@ -434,6 +438,7 @@
             font-size: 1rem !important;
             padding: 0.75rem 1.5rem !important;
         }
+
         .btn-create:hover {
             background-color: #157347;
             color: white;
@@ -444,6 +449,7 @@
             background-color: #ffc107;
             color: #333;
         }
+
         .btn-edit:hover {
             background-color: #e0a800;
             color: #333;
@@ -454,6 +460,7 @@
             background-color: #dc3545;
             color: white;
         }
+
         .btn-delete:hover {
             background-color: #b02a37;
             color: white;
@@ -464,6 +471,7 @@
             background-color: #495057;
             color: white;
         }
+
         .btn-blacklist:hover {
             background-color: #343a40;
             color: white;
@@ -480,33 +488,39 @@
             font-weight: 600;
             text-transform: uppercase;
         }
+
         .btn-view:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
             color: white;
             transform: scale(1.05);
         }
-        
+
         /* "Glass" Table Style */
         .table-glass {
             background-color: rgba(0, 0, 0, 0.15);
             color: white;
             border-radius: 0.75rem;
-            overflow: hidden; /* Ensures border-radius applies to table corners */
+            overflow: hidden;
+            /* Ensures border-radius applies to table corners */
         }
+
         .table-glass th {
             background-color: rgba(0, 0, 0, 0.2);
             color: #fff;
             border-color: rgba(255, 255, 255, 0.2) !important;
         }
+
         .table-glass td,
         .table-glass th {
             border-color: rgba(255, 255, 255, 0.1) !important;
             vertical-align: middle;
         }
+
         .table-glass tbody tr:hover {
             background-color: rgba(255, 255, 255, 0.05);
         }
+
         .table-glass .btn-view {
             width: 100%;
         }
@@ -517,12 +531,11 @@
             font-weight: 500;
             margin-bottom: 0.5rem;
         }
-
-
     </style>
 </head>
 
 <!-- We use 'landing-page' class to get the correct body layout (display: block) -->
+
 <body class="landing-page">
 
     <!-- Admin Navbar -->
@@ -533,26 +546,27 @@
                 <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
                 <span class="fw-bold ms-2">MediCare Admin</span>
             </a>
-            
+
             <!-- Navbar Toggler -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="adminNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
+                        <a class="nav-link" href="/admin">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Add Doctor</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Settings</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
-                        <a href="/login" class="btn btn-login ms-lg-2">Logout <i class="fa-solid fa-right-from-bracket ms-1"></i></a>
+                        <a href="/login" class="btn btn-login ms-lg-2">Logout <i
+                                class="fa-solid fa-right-from-bracket ms-1"></i></a>
                     </li>
                 </ul>
             </div>
@@ -569,46 +583,67 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
                 <div class="glass-card content-card">
-                    <form>
+                    <form action="/add_doctor" method="POST">
                         <!-- Fullname -->
-                        <div class="mb-3">
-                            <label for="docFullname" class="form-label form-label-admin">Fullname</label>
-                            <input type="text" class="form-control form-control-admin" id="docFullname" placeholder="Enter full name" required>
+                        <div class="input-group">
+                            <span class="input-group-text"
+                                style="background: rgba(255,255,255,0.9); font-weight:600;">Dr.</span>
+                            <input type="text" class="form-control form-control-admin" id="docFullname"
+                                placeholder="Enter full name" required name="username">
                         </div>
 
                         <!-- Specialization/Department -->
+                        <!-- Specialization/Department Dropdown -->
                         <div class="mb-3">
-                            <label for="docSpecialization" class="form-label form-label-admin">Specialization/Department</label>
-                            <input type="text" class="form-control form-control-admin" id="docSpecialization" placeholder="e.g., Cardiology, Neurology" required>
+                            <label for="docSpecialization"
+                                class="form-label form-label-admin">Specialization/Department</label>
+
+                            <!-- 
+                                Use "form-select" for dropdowns and "form-control-admin" 
+                                to get your "nice" white/light style.
+                            -->
+                            <select class="form-select form-control-admin" id="docSpecialization" name="department"
+                                required name="department">
+                                <option value="" disabled selected>Select a department</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Oncology">Oncology</option>
+                                <option value="General">General</option>
+                                <!-- Add more departments here as needed -->
+                            </select>
                         </div>
 
                         <!-- Experience -->
                         <div class="mb-3">
                             <label for="docExperience" class="form-label form-label-admin">Experience (years)</label>
-                            <input type="number" class="form-control form-control-admin" id="docExperience" placeholder="Enter a number" required>
+                            <input type="number" class="form-control form-control-admin" id="docExperience"
+                                placeholder="Enter a number" required name="experience">
                         </div>
-                        
+
                         <!-- Phone Number -->
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="docPhone" class="form-label form-label-admin">Phone Number</label>
-                            <input type="tel" class="form-control form-control-admin" id="docPhone" placeholder="Enter phone number">
+                            <input type="tel" class="form-control form-control-admin" id="docPhone" placeholder="Enter phone number" name="phone">
                         </div>
-                        
+                         -->
                         <!-- Email Address -->
                         <div class="mb-3">
                             <label for="docEmail" class="form-label form-label-admin">Email Address</label>
-                            <input type="email" class="form-control form-control-admin" id="docEmail" placeholder="Enter email" required>
+                            <input type="email" class="form-control form-control-admin" id="docEmail"
+                                placeholder="Enter email" required name="email">
                         </div>
 
                         <!-- Assign Password -->
                         <div class="mb-3">
                             <label for="docPassword" class="form-label form-label-admin">Assign Password</label>
-                            <input type="password" class="form-control form-control-admin" id="docPassword" placeholder="Create a secure password" required>
+                            <input type="password" class="form-control form-control-admin" id="docPassword"
+                                placeholder="Create a secure password" required name="password">
                         </div>
 
                         <!-- Create Button -->
                         <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-create"><i class="fa-solid fa-plus me-1"></i> Create Doctor</button>
+                            <button type="submit" class="btn btn-create"><i class="fa-solid fa-plus me-1"></i> Create
+                                Doctor</button>
                         </div>
                     </form>
                 </div>
@@ -620,4 +655,5 @@
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
