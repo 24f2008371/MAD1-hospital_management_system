@@ -307,3 +307,56 @@ a {
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+/* ... existing CSS ... */
+
+/* 3.5 About Us Section */
+/* ... existing styles for about-section ... */
+
+/* 3.6 Contact Us Section */
+.contact-section {
+    padding: 6rem 1rem;
+    color: white;
+}
+
+.contact-section .text-white-80 {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.contact-info-card,
+.contact-form-card {
+    /* Inherits glass-card styles */
+    padding: 2.5rem !important; /* Make sure padding is consistent */
+}
+
+.contact-details li {
+    font-size: 1.1rem;
+}
+
+.contact-details i {
+    font-size: 1.5rem;
+    color: #fff;
+    flex-shrink: 0;
+    width: 30px;
+    text-align: center;
+}
+
+.contact-details a {
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.2s ease;
+}
+
+.contact-details a:hover {
+    color: #fff;
+}
+
+/* Override custom input icon positioning for textarea */
+.contact-form-card textarea.form-control-glass {
+    padding-left: 3rem; /* Match other inputs */
+}
+
+.contact-form-card .input-group-text-custom.fa-message {
+    top: 1rem; /* Adjust icon position for textarea to top left */
+    transform: none;
+}
+

@@ -26,20 +26,22 @@ def create_app():
 
     db.init_app(app) # 3 database 
     app.app_context().push() # runtime error if not using this, brings everything under context of flask app
-
-    with app.app_context():
-        db.create_all()
+    return app
 
 app = create_app()
 from application.controllers import * #2 controllers  
 
 
 if __name__ == "__main__":
-    # db.create_all()
-    # user1 = User(username = 'admin', password = '1234', type = 'admin')
-    # db.session.add(user1)
-    # db.session.commit()
-    # print("Database created!")
+    with app.app_context():
+        db.create_all()
+        if not User.query.filter_by(username='admin').first():
+            user1 = User(username = 'admin', password = '1234', type = 'admin')
+            db.session.add(user1)
+            db.session.commit()
+            print("Database created and admin user added!")
+        else:
+            print("Database already exists.")
     app.run() 
 
 
