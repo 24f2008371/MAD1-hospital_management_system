@@ -28,6 +28,8 @@ class Patient(db.Model):
     id = db.Column(db.Integer(),primary_key = True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     name = db.Column(db.String(), nullable=False)
+    age = db.Column(db.Integer(), nullable=False)
+    gender = db.Column(db.String(), nullable=False)
     phone = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False)
     appointment = db.relationship('Appointment', backref='patient', cascade="all, delete-orphan")
@@ -55,3 +57,10 @@ class Treatment(db.Model):
     date = db.Column(db.String(), nullable=False)
     time = db.Column(db.String(), nullable=False)
     appointment = db.relationship('Appointment', backref='treatment')
+
+class Enquiry(db.Model):
+    __tablename__ = 'enquiry'
+    id = db.Column(db.Integer(),primary_key = True)
+    name = db.Column(db.String(), nullable=False)
+    email = db.Column(db.String(), nullable=False)
+    message = db.Column(db.String(), nullable=False)

@@ -132,3 +132,20 @@ def oncology():
 def general():
     return render_template("general.html")
 
+
+# --- NEW ENQUIRY SUBMISSION ENDPOINT ---
+@app.route("/submit_enquiry", methods=['POST'])
+def submit_enquiry():
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+
+        if name and email and message:
+                # Create a new Enquiry object and save it in the database
+                new_enquiry = Enquiry(name=name, email=email, message=message)
+                db.session.add(new_enquiry)
+                db.session.commit()
+    # Redirect back to the homepage (or wherever the form is located)
+    return redirect(url_for('homepage'))
+

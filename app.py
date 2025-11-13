@@ -1,8 +1,7 @@
 from flask import Flask
 from application.database import db #3 database
 from application.models import *
-from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager
 
 app = None
 
