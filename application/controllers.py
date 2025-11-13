@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for, flash
 from flask import current_app as app # it refers to the app.py
+from sqlalchemy import or_
 
 from .models import *
 
@@ -33,22 +34,65 @@ def register():
     if request.method=="POST":
         username = request.form.get("username")
         password = request.form.get("password")
+
+        # Fields for patient table
+        name = request.form.get("name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        age = request.form.get("age")
+        gender = request.form.get("gender")
+
         this_user = User.query.filter_by(username=username).first()
         if this_user: # if this user exists
             return render_template("already_exists.html")
-        else: # if this user does not exist
-            new_user = User(username=username, password=password)
-            db.session.add(new_user)
-            db.session.commit()
+        
+        new_user = User(username=username, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        new_patient = Patient(user_id = new_user.id, name=name, age=age, email=email, gender=gender, phone=phone)
+        db.session.add(new_patient)
+        db.session.commit()
+        
         return redirect("/login")
     return render_template("register.html")
 
 # endpoint for admin dashboard
-
 @app.route("/admin")
 def admin_dash():
+
+    # Search query
+    q = request.args.get("q", "").strip()
+
+    # Show normal data if search is empty
+    if q == "":
+        doctors = Doctor.query.all()
+        patients = Patient.query.all()
+
+    else:
+        ilike_q = f"%{q}%" # f-string 
+        # in SQL %Ridhi% means jahan bhi Ridhi aaye ____Ridhi_____ 
+
+        # or_(...) → SQLAlchemy function jo OR condition banata hai (ya to ye condition ya vo).
+
+        doctors = Doctor.query.filter(
+            or_(
+                Doctor.doctor_name.ilike(ilike_q), # ilike is the case insensitive version of LIKE function of SQL
+                Doctor.email.ilike(ilike_q)
+            )
+        ).all()
+
+        patients = Patient.query.filter(
+            or_(
+                Patient.name.ilike(ilike_q),
+                Patient.email.ilike(ilike_q),
+                Patient.phone.ilike(ilike_q)
+            )  
+        ).all()
+
+
     this_user = User.query.filter_by(type="admin").first()
-    return render_template("admin_dash.html", this_user = this_user)
+    return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q)
 
 @app.route("/doctor")
 def doctor_dash():

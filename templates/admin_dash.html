@@ -520,6 +520,48 @@
         .table-glass .btn-view {
             width: 100%;
         }
+
+        /* Action Buttons */
+        .btn-action {
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            margin-left: 6px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background-color: #f4c542;
+            color: rgb(38, 38, 38);
+            /* Yellow */
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            /* Red */
+        }
+
+        .btn-blacklist {
+            background-color: #555;
+            /* Grey */
+        }
+
+        .admin-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+
+        .admin-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
     </style>
 </head>
 
@@ -580,9 +622,9 @@
         <!-- Search Bar -->
         <div class="glass-card search-bar" style="display: flex; justify-content: space-between;">
             <h1 class="text-white h3 fw-bold">Welcome, {{this_user.username}}!</h1>
-            <form class="d-flex w-50">
-                <input class="form-control me-2 form-control-admin" type="search"
-                    placeholder="Search for doctor, patient, department..." aria-label="Search">
+            <form class="d-flex w-50" method="get" action="/admin">
+                <input name="q" class="form-control me-2 form-control-admin" type="text"
+                    placeholder="Search doctor/patient..." value="{{ q }}">
                 <button class="btn btn-login" type="submit">Search</button>
             </form>
         </div>
@@ -602,31 +644,32 @@
                     </div>
 
                     <ul class="admin-list">
+                        {% if doctors %}
+                        {% for d in doctors %}
                         <li class="admin-list-item">
-                            <span class="admin-list-item-name">Dr. Abcde</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
+
+                            <!-- LEFT SIDE: Doctor Info -->
+                            <div>
+                                <strong>{{ d.doctor_name }}</strong>
+                                <br>
+                                <small style="color: #ddd;">{{ d.email }}</small>
                             </div>
-                        </li>
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Dr. Pqrst</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
+
+                            <!-- RIGHT SIDE: Action Buttons -->
+                            <div class="admin-buttons">
+                                <a href="/edit_doctor/{{ d.id }}" class="btn-action btn-edit">edit</a>
+                                <a href="/delete_doctor/{{ d.id }}" class="btn-action btn-delete">delete</a>
+                                <a href="/blacklist_doctor/{{ d.id }}" class="btn-action btn-blacklist">blacklist</a>
                             </div>
+
                         </li>
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Dr. Xyz</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
-                            </div>
-                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <li>No doctors found.</li>
+                        {% endif %}
                     </ul>
+
+
                 </div>
 
                 <!-- Registered Patients -->
@@ -636,22 +679,29 @@
                     </div>
 
                     <ul class="admin-list">
+                        {% if patients %}
+                        {% for p in patients %}
                         <li class="admin-list-item">
-                            <span class="admin-list-item-name">Mr. Abcde</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
+
+                            <!-- LEFT SIDE: Doctor Info -->
+                            <div>
+                                <strong>{{ p.name }}</strong>
+                                <br>
+                                <small style="color: #ddd;">{{ p.email }}</small>
                             </div>
-                        </li>
-                        <li class="admin-list-item">
-                            <span class="admin-list-item-name">Miss. Pqrst</span>
-                            <div class="admin-list-buttons">
-                                <button class="btn btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-blacklist"><i class="fa-solid fa-ban"></i></button>
+
+                            <!-- RIGHT SIDE: Action Buttons -->
+                            <div class="admin-buttons">
+                                <a href="/edit_patient/{{ p.id }}" class="btn-action btn-edit">edit</a>
+                                <a href="/delete_patient/{{ p.id }}" class="btn-action btn-delete">delete</a>
+                                <a href="/blacklist_patient/{{ p.id }}" class="btn-action btn-blacklist">blacklist</a>
                             </div>
+
                         </li>
+                        {% endfor %}
+                        {% else %}
+                        <li>No Patients found.</li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
