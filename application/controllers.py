@@ -17,6 +17,11 @@ def login():
         this_user= User.query.filter_by(username=username).first()
         if this_user: # if this user exists
             if this_user.password == password:
+                if this_user.type == "patient":
+                    patient = Patient.query.filter_by(user_id = this_user.id).first()
+                    if patient and patient.blocked == True:
+                        flash("Your account has been blacklisted by the admin!", "danger")
+                        return redirect("/login")
                 if this_user.type == "admin":
                     return redirect("/admin")
                 elif this_user.type == "doctor":
@@ -28,6 +33,8 @@ def login():
         else:
             return render_template("not_exists.html")   
     return render_template("login.html")
+
+
     
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -53,9 +60,11 @@ def register():
         new_patient = Patient(user_id = new_user.id, name=name, age=age, email=email, gender=gender, phone=phone)
         db.session.add(new_patient)
         db.session.commit()
-        
+
         return redirect("/login")
     return render_template("register.html")
+
+
 
 # endpoint for admin dashboard
 @app.route("/admin")
@@ -67,7 +76,8 @@ def admin_dash():
     # Show normal data if search is empty
     if q == "":
         doctors = Doctor.query.all()
-        patients = Patient.query.all()
+        patients = Patient.query.filter_by(blocked=False).all()
+        blacklisted_patients = Patient.query.filter_by(blocked = True).all()
 
     else:
         ilike_q = f"%{q}%" # f-string 
@@ -82,7 +92,7 @@ def admin_dash():
             )
         ).all()
 
-        patients = Patient.query.filter(
+        patients = Patient.query.filter_by(blocked=False).filter(
             or_(
                 Patient.name.ilike(ilike_q),
                 Patient.email.ilike(ilike_q),
@@ -90,9 +100,11 @@ def admin_dash():
             )  
         ).all()
 
+        blacklisted_patients = Patient.query.filter_by(blocked = True).all()
+
 
     this_user = User.query.filter_by(type="admin").first()
-    return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q)
+    return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q, blacklisted_patients = blacklisted_patients)
 
 @app.route("/doctor")
 def doctor_dash():
@@ -103,6 +115,61 @@ def doctor_dash():
 def patient_dash():
     this_user = User.query.filter_by(type="patient").first()
     return render_template("patient_dash.html", this_user = this_user)
+
+# Delete patient route
+@app.route("/delete_patient/<int:id>")
+def delete_patient(id):
+    patient = Patient.query.get_or_404(id)
+    user = User.query.get(patient.user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash("Patient deleted successfully!", "success")
+    return redirect("/admin")
+
+# Edit patient route
+@app.route("/edit_patient/<int:id>", methods = ['GET','POST'])
+def edit_patient(id):
+    patient = Patient.query.get_or_404(id)
+
+    if request.method == "POST":
+        patient.name = request.form.get("name")
+        patient.email = request.form.get("email")
+        patient.age = request.form.get("age")
+        patient.gender = request.form.get("gender")
+        patient.phone = request.form.get("phone")
+
+        db.session.commit()
+
+        flash("Patient updated successfully!", "success")
+        return redirect("/admin")
+    return render_template("edit_patient.html", patient = patient)
+
+
+# Blacklist patient route
+@app.route("/blacklist_patient/<int:id>")
+def blacklist_patient(id):
+    patient = Patient.query.get_or_404(id)
+
+    patient.blocked = True
+    db.session.commit()
+
+    db.session.commit()
+
+    flash("Patient has been blacklisted successfully!", "danger")
+    return redirect("/admin")
+
+
+# Unblacklist patient route
+@app.route("/unblacklist_patient/<int:id>")
+def unblacklist_patient(id):
+    patient = Patient.query.get_or_404(id)
+    patient.blocked = False
+    db.session.commit()
+
+    flash("Patient unblacklisted successfully!", "success")
+    return redirect("/admin")
+
+
 
 @app.route("/patient_history")
 def patient_history():

@@ -8,12 +8,12 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
@@ -50,7 +50,7 @@
 
         /* Body style for multi-section pages */
         body.landing-page {
-            display: block; 
+            display: block;
             padding: 0;
             overflow-y: auto;
             overflow-x: hidden;
@@ -123,7 +123,7 @@
             box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
-        
+
         /* 2.3 Form Elements */
         .form-control-glass {
             background: rgba(255, 255, 255, 0.15) !important;
@@ -132,9 +132,11 @@
             border-radius: 0.75rem !important;
             padding-left: 3rem;
         }
+
         .form-control-glass::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
+
         .form-control-glass:focus {
             box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
             background: rgba(255, 255, 255, 0.2) !important;
@@ -150,7 +152,7 @@
             z-index: 10;
             color: rgba(255, 255, 255, 0.8);
         }
-        
+
         .form-label-admin {
             color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
@@ -178,7 +180,7 @@
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
+
         /* NEW STYLES FOR ROLE TOGGLE */
         .btn-group .btn-role {
             /* This is the "inactive" glass style */
@@ -190,7 +192,7 @@
             font-weight: 700;
             padding: 0.6rem;
         }
-        
+
         .btn-group .btn-role:hover:not(.btn-role-active) {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
@@ -204,21 +206,88 @@
             border: 1px solid #fff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         /* Fixes Bootstrap's button group rounding */
-        .btn-group > .btn:first-child {
+        .btn-group>.btn:first-child {
             border-top-left-radius: 0.5rem;
             border-bottom-left-radius: 0.5rem;
         }
-        .btn-group > .btn:last-child {
+
+        .btn-group>.btn:last-child {
             border-top-right-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
         }
 
+        /* Flash message inside login card */
+        .alert-glass {
+            width: 100%;
+            background: rgba(255, 80, 80, 0.25);
+            color: #fff;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            font-weight: 500;
+            position: relative;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .alert-glass.success {
+            background: rgba(0, 255, 100, 0.25);
+            border-color: rgba(0, 255, 100, 0.5);
+        }
+
+        .alert-glass.danger {
+            background: rgba(255, 0, 0, 0.25);
+            border-color: rgba(255, 0, 0, 0.6);
+        }
+
+        .alert-glass .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 8px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Auto hide animation */
+        .fade-out {
+            animation: fadeOut 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
     </style>
 </head>
 
 <body>
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-4">
@@ -232,16 +301,29 @@
                         <p class="text-white-60">Please enter your credentials to login.</p>
                     </div>
                     <div class="card-body">
-                        
+
+                        <!-- Flash Messages Inside Login Card -->
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert-glass {{ category }}">
+                            {{ message }}
+                            <button class="close-btn" onclick="this.parentElement.remove()">×</button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+
                         <form action="/login" method="post">
-                            
+
                             <!-- Username -->
                             <div class="mb-4 position-relative">
                                 <label for="username" class="form-label visually-hidden">Username</label>
                                 <span class="input-group-text-custom">
                                     <i class="fas fa-user"></i>
                                 </span>
-                                <input type="text" class="form-control form-control-lg form-control-glass" id="username" placeholder="Username" required name="username">
+                                <input type="text" class="form-control form-control-lg form-control-glass" id="username"
+                                    placeholder="Username" required name="username">
                             </div>
 
                             <!-- Password -->
@@ -268,7 +350,7 @@
                                     </button>
                                 </div>
                             </div> -->
-                            
+
                             <!-- Hidden input to store the selected role -->
                             <input type="hidden" id="userType" name="type" value="patient">
 
@@ -291,23 +373,23 @@
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Simple JS to handle the button toggle -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const roleButtons = document.querySelectorAll('.btn-role');
             const userTypeInput = document.getElementById('userType');
 
             roleButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     // 1. Remove active class from all buttons
                     roleButtons.forEach(btn => {
                         btn.classList.remove('btn-role-active');
                     });
-                    
+
                     // 2. Add active class to the clicked button
                     this.classList.add('btn-role-active');
-                    
+
                     // 3. Update the hidden input value
                     const selectedType = this.getAttribute('data-type');
                     userTypeInput.value = selectedType;
@@ -315,5 +397,21 @@
             });
         });
     </script>
+
+    <script>
+        // Auto hide flash messages after 3 seconds
+        document.addEventListener("DOMContentLoaded", () => {
+            const alerts = document.querySelectorAll('.alert-glass');
+
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('fade-out');
+                    setTimeout(() => alert.remove(), 800); // Remove after animation
+                }, 3000);
+            });
+        });
+    </script>
+
 </body>
+
 </html>

@@ -17,6 +17,9 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         /*
             MediCare - Main Stylesheet
@@ -562,12 +565,104 @@
             align-items: center;
             gap: 6px;
         }
+
+        .glass-modal {
+            background: rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(25px) !important;
+            border-radius: 1rem;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .form-control-glass {
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.35) !important;
+        }
     </style>
 </head>
 
 <!-- We use 'landing-page' class to get the correct body layout (display: block) -->
 
+
 <body class="landing-page">
+
+
+    <!-- EDIT PATIENT MODAL -->
+    <div class="modal fade" id="editPatientModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content glass-modal">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Patient</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form id="editPatientForm" method="post">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="editName" name="name" class="form-control form-control-glass">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Age</label>
+                            <input type="number" id="editAge" name="age" class="form-control form-control-glass">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label>
+                            <select id="editGender" name="gender" class="form-control form-control-glass">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" id="editPhone" name="phone" class="form-control form-control-glass">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="editEmail" name="email" class="form-control form-control-glass">
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- For the modal -->
+    <script>
+        function openEditModal(id, name, age, gender, phone, email) {
+
+            // Fill form
+            document.getElementById("editName").value = name;
+            document.getElementById("editAge").value = age;
+            document.getElementById("editGender").value = gender;
+            document.getElementById("editPhone").value = phone;
+            document.getElementById("editEmail").value = email;
+
+            // Set correct action route
+            document.getElementById("editPatientForm").action = "/edit_patient/" + id;
+
+            // Show modal
+            var modal = new bootstrap.Modal(document.getElementById("editPatientModal"));
+            modal.show();
+        }
+    </script>
+
     <!-- Added new doctor message! -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -704,6 +799,41 @@
                         {% endif %}
                     </ul>
                 </div>
+
+                <div class="glass-card content-card">
+                    <div class="content-card-header">
+                        <h3><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Patients</h3>
+                    </div>
+
+                    <ul class="admin-list">
+                        {% if blacklisted_patients %}
+                        {% for p in blacklisted_patients %}
+                        <li class="admin-list-item">
+
+                            <!-- LEFT SIDE -->
+                            <div>
+                                <strong>{{ p.name }}</strong>
+                                <br>
+                                <small style="color: #ddd;">{{ p.email }}</small>
+                            </div>
+
+                            <!-- RIGHT SIDE BUTTON -->
+                            <div class="admin-buttons">
+                                <a href="/unblacklist_patient/{{ p.id }}" class="btn-action btn-create">
+                                    unblacklist
+                                </a>
+                            </div>
+
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <li>No Blacklisted Patients.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+
+
             </div>
 
             <!-- Right Column (Appointments) -->
@@ -756,8 +886,7 @@
 
     </main>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
