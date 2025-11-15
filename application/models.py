@@ -21,6 +21,7 @@ class Doctor(db.Model):
     type = db.Column(db.String(), nullable=False)
     experience = db.Column(db.Integer(), nullable=False)
     appointment = db.relationship('Appointment', backref='doctor', cascade="all, delete-orphan")
+    availability = db.relationship('Availability', backref='doctor', cascade="all, delete-orphan")
 
 
 class Patient(db.Model):
@@ -65,3 +66,14 @@ class Enquiry(db.Model):
     name = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False)
     message = db.Column(db.String(), nullable=False)
+
+class Availability(db.Model):
+    __tablename__ = 'availability'
+    id = db.Column(db.Integer, primary_key=True)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id', ondelete="CASCADE"), nullable=False)
+    date = db.Column(db.String(), nullable=False)        # ex: "2025-01-21"
+    slot = db.Column(db.String(), nullable=False)        # "morning" or "evening"
+    is_available = db.Column(db.Boolean(), default=True, nullable=False)
+
+
+

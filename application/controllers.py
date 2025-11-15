@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for, flash
 from flask import current_app as app # it refers to the app.py
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from flask import session
 
 from .models import *
@@ -120,6 +120,18 @@ def admin_dash():
 
         blacklisted_patients = Patient.query.filter_by(blocked = True).all()
 
+        blacklisted_doctors = Doctor.query.join(User).filter(
+            and_(
+                User.blocked == True,
+                or_(
+                    Doctor.doctor_name.ilike(ilike_q),
+                    Doctor.email.ilike(ilike_q)
+                )
+            )
+        ).all()
+
+
+
 
     this_user = User.query.filter_by(type="admin").first()
     return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q, blacklisted_patients = blacklisted_patients, blacklisted_doctors = blacklisted_doctors)
@@ -129,8 +141,20 @@ def admin_dash():
 
 @app.route("/doctor")
 def doctor_dash():
-    this_user = User.query.filter_by(type="doctor").first()
-    return render_template("doctor_dash.html", this_user = this_user)
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
+
+    # Get the current logged in user - doctor
+    doctor = Doctor.query.filter_by(user_id=user_id).first()
+
+    if not doctor:
+        flash("Doctor profile not found!", "danger")
+        return redirect("/login")
+
+    return render_template("doctor_dash.html", doctor=doctor)
+
+
 
 
 
@@ -384,3 +408,119 @@ def submit_enquiry():
     # Redirect back to the homepage (or wherever the form is located)
     return redirect(url_for('homepage'))
 
+# DOCTOR AVAILABILITY ROUTE
+
+@app.route("/doctor/availability", methods=["GET","POST"])
+def doctor_availability():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
+    
+    doctor = Doctor.query.filter_by(user_id = user_id).first()
+
+    if request.method == "POST":
+        date = request.form.get("date")
+        slot = request.form.get("slot")
+
+        new_availability = Availability(doctor_id = doctor.id, date=date, slot=slot)
+
+        db.session.add(new_availability)
+        db.session.commit()
+        flash("Availability added!", "success")
+
+    all_slots = Availability.query.filter_by(doctor_id = doctor.id).all()
+
+    from datetime import datetime, timedelta
+
+    # for importing the next 7 dates
+
+    today = datetime.today()
+
+    next_7_days = [(today + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
+
+
+    return render_template("doctor_availability.html", doctor=doctor, slots=all_slots, next_7_days = next_7_days)
+
+# DELETE AVAILABIKITY ROUTE
+
+@app.route("/doctor/availability/delete/<int:id>")
+def delete_availability(id):
+    slot = Availability.query.get(id)
+    if slot:
+        db.session.delete(slot)
+        db.session.commit()
+        flash("Availability removed!", "success")
+    return redirect("/doctor/availability")
+
+# SET AVAILABILITY ROUTE
+# ONLY TO BE USED BY DOCTOR
+
+@app.route("/doctor/set_availability", methods = ["GET","POST"])
+def doctor_set_availability():
+    user_id = session.get("user_id")
+    if not user_id :
+        return redirect("/login")
+    
+    doctor = Doctor.query.filter_by(user_id=user_id).first()
+    if not doctor:
+        flash("Doctor not found!", "danger")
+        return redirect("/doctor")
+    
+    # GET next 7 days
+    from datetime import datetime, timedelta
+    today = datetime.today()
+    next_days = [(today + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
+
+    if request.method == "POST":
+        date = request.form["date"]
+        slot = request.form["slot"]
+
+        # Check if already exists
+        existing = Availability.query.filter_by(doctor_id=doctor.id,date=date,slot=slot).first()
+
+        if existing:
+            existing.is_available = True
+        else:
+            new_slot = Availability(doctor_id=doctor.id,date=date,slot=slot,is_available=True)
+            db.session.add(new_slot)
+
+        db.session.commit()
+        flash("Availability saved!", "success")
+        return redirect("/doctor/set_availability")
+
+    all_slots = Availability.query.filter_by(doctor_id=doctor.id).all()
+
+    return render_template(
+        "doctor_set_availability.html",
+        doctor=doctor,
+        next_days=next_days,
+        slots=all_slots
+    )
+
+# CHECK AVAILABILITY ROUTE
+# TO BE USED BY PATIENT
+
+@app.route("/doctor/check_availability/<int:doctor_id>")
+def patient_check_availability(doctor_id):
+    doctor = Doctor.query.get_or_404(doctor_id)
+
+    # Next 7 days
+    from datetime import datetime, timedelta
+    today = datetime.today()
+    next_days = [(today + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
+
+    slots = Availability.query.filter_by(doctor_id=doctor.id).all()
+
+    return render_template("patient_check_availability.html",doctor=doctor, next_days=next_days,slots=slots)
+
+
+# BOOK SLOT ROUTE
+
+@app.route("/book_slot/<int:slot_id>")
+def book_slot(slot_id):
+    slot = Availability.query.get_or_404(slot_id)
+    slot.is_available = False
+    db.session.commit()
+
+    flash("Slot booked successfully!", "success")
+    return redirect(request.referrer)

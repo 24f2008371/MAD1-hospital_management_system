@@ -8,12 +8,12 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
@@ -42,7 +42,7 @@
 
         /* Body style for multi-section pages (like this dashboard) */
         body.landing-page {
-            display: block; 
+            display: block;
             padding: 0;
             overflow-y: auto;
             overflow-x: hidden;
@@ -116,7 +116,7 @@
             box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
-        
+
         /* =================================== */
         /* 3. Dashboard Components             */
         /* =================================== */
@@ -126,7 +126,8 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(30px);
             border-radius: 1rem;
-            width: 90%; /* Keeping this at 90% as requested */
+            width: 90%;
+            /* Keeping this at 90% as requested */
             margin: 1rem auto 0 auto;
             border: 1px solid rgba(255, 255, 255, 0.2);
             z-index: 1000;
@@ -135,15 +136,18 @@
         .app-navbar .navbar-brand span {
             color: #fff !important;
         }
+
         .app-navbar .nav-link {
             color: rgba(255, 255, 255, 0.8) !important;
             font-weight: 500;
             transition: all 0.2s ease;
         }
+
         .app-navbar .nav-link:hover,
         .app-navbar .nav-link.active {
             color: #fff !important;
         }
+
         .app-navbar .btn {
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
@@ -157,35 +161,39 @@
             margin: 0;
             padding: 0;
         }
+
         .patient-nav-links li {
             margin-left: 1rem;
         }
+
         .patient-nav-links a {
             color: rgba(255, 255, 255, 0.7);
             font-weight: 500;
             font-size: 0.95rem;
             transition: all 0.3s ease;
         }
+
         .patient-nav-links a:hover {
             color: #fff;
             text-decoration: underline;
         }
+
         .welcome-text {
             color: #fff;
             font-size: 1.2rem;
             font-weight: 500;
             margin-right: 1.5rem;
         }
-        
+
         /* Header Bar for Titles */
         .admin-title {
             color: #fff;
             font-weight: 700;
             margin-bottom: 0;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
-        
+
         .admin-header-bar {
             display: flex;
             justify-content: space-between;
@@ -206,12 +214,13 @@
             font-size: 1.25rem;
             transition: all 0.3s ease;
         }
+
         .btn-back-icon:hover {
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
             transform: scale(1.05);
         }
-        
+
         .header-spacer {
             width: 50px;
             height: 50px;
@@ -220,11 +229,14 @@
         /* 3.6 Doctor/Patient Details (Dark Text) */
         .details-text {
             font-size: 1.1rem;
-            color: #374151; /* text-gray-700 */
+            color: #374151;
+            /* text-gray-700 */
             margin-bottom: 0.5rem;
         }
+
         .details-text strong {
-            color: #1f2937; /* text-gray-800 */
+            color: #1f2937;
+            /* text-gray-800 */
             font-weight: 600;
             min-width: 150px;
             display: inline-block;
@@ -233,11 +245,13 @@
         /* =================================== */
         /* 5. NEW White Availability Card      */
         /* =================================== */
-        
+
         .availability-card-white {
-            background-color: rgba(255, 255, 255, 0.9); /* "Frosted Glass" White */
+            background-color: rgba(255, 255, 255, 0.9);
+            /* "Frosted Glass" White */
             backdrop-filter: blur(15px);
-            color: #1f2937; /* Dark text */
+            color: #1f2937;
+            /* Dark text */
             border-radius: 1.5rem;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 2rem;
@@ -246,34 +260,40 @@
         }
 
         .availability-card-white h2 {
-             color: #111827; /* Near-black */
-             font-weight: 700;
+            color: #111827;
+            /* Near-black */
+            font-weight: 700;
         }
-        
+
         .availability-card-white .section-divider {
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             padding-top: 1.5rem;
         }
-        
+
         /* The grid row */
         .availability-row {
             display: flex;
-            flex-direction: column; /* Start as column for mobile */
+            flex-direction: column;
+            /* Start as column for mobile */
             margin-bottom: 1rem;
         }
 
         /* The date part */
         .slot-date {
-            background-color: #eff6ff; /* bg-blue-50 */
-            border: 1px solid #d1d5db; /* border-gray-300 */
-            color: #374151; /* text-gray-700 */
+            background-color: #eff6ff;
+            /* bg-blue-50 */
+            border: 1px solid #d1d5db;
+            /* border-gray-300 */
+            color: #374151;
+            /* text-gray-700 */
             font-weight: 500;
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
             text-align: center;
-            margin-bottom: 0.75rem; /* Space on mobile */
+            margin-bottom: 0.75rem;
+            /* Space on mobile */
         }
-        
+
         /* The two slot buttons */
         .slot-buttons-wrapper {
             display: flex;
@@ -283,61 +303,77 @@
 
         /* Base class for bright slots */
         .btn-slot-bright {
-            flex: 1 1 0%; /* Grow to fill */
+            flex: 1 1 0%;
+            /* Grow to fill */
             border: 2px solid transparent;
             border-radius: 0.5rem;
             padding: 0.75rem 0.5rem;
             font-weight: 600;
             transition: all 0.2s ease;
         }
-        
+
         .btn-available-bright {
-            color: #15803d; /* text-green-700 */
-            border-color: #34d399; /* border-green-400 */
-            background-color: #f0fdf4; /* bg-green-50 */
+            color: #15803d;
+            /* text-green-700 */
+            border-color: #34d399;
+            /* border-green-400 */
+            background-color: #f0fdf4;
+            /* bg-green-50 */
             cursor: pointer;
         }
+
         .btn-available-bright:hover {
-            background-color: #dcfce7; /* bg-green-100 */
+            background-color: #dcfce7;
+            /* bg-green-100 */
             transform: scale(1.02);
         }
-        
+
         .btn-unavailable-bright {
-            color: #b91c1c; /* text-red-700 */
-            border-color: #f87171; /* border-red-400 */
-            background-color: #fef2f2; /* bg-red-50 */
+            color: #b91c1c;
+            /* text-red-700 */
+            border-color: #f87171;
+            /* border-red-400 */
+            background-color: #fef2f2;
+            /* bg-red-50 */
             opacity: 0.75;
             cursor: not-allowed;
         }
-        
+
         /* "Amazing" selected style */
         .btn-slot-selected-bright {
-            border-color: #2563eb; /* border-blue-600 */
-            background-color: #eff6ff; /* bg-blue-50 */
-            box-shadow: 0 0 0 3px #bfdbfe, 0 4px 10px rgba(0,0,0,0.1); /* ring-2 ring-blue-400 */
+            border-color: #2563eb;
+            /* border-blue-600 */
+            background-color: #eff6ff;
+            /* bg-blue-50 */
+            box-shadow: 0 0 0 3px #bfdbfe, 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* ring-2 ring-blue-400 */
             transform: scale(1.02);
         }
 
         /* Desktop grid layout */
-        @media (min-width: 768px) { /* md: breakpoint */
+        @media (min-width: 768px) {
+
+            /* md: breakpoint */
             .availability-row {
                 flex-direction: row;
                 align-items: center;
                 gap: 1rem;
             }
+
             .slot-date {
                 width: 33.333%;
                 margin-bottom: 0;
             }
+
             .slot-buttons-wrapper {
                 width: 66.666%;
             }
         }
-
     </style>
 </head>
 
 <!-- We use 'landing-page' class to get the correct body layout (display: block) -->
+
 <body class="landing-page">
 
     <!-- Patient Navbar -->
@@ -348,17 +384,17 @@
                 <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
                 <span class="fw-bold ms-2">MediCare</span>
             </a>
-            
+
             <!-- Navbar Toggler -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#patientNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="patientNav">
                 <div class="ms-auto d-flex align-items: center">
-                    <span class="welcome-text d-none d-lg-block">Welcome Pqrst</span>
-                    
+                    <span class="welcome-text d-none d-lg-block">Welcome {{this_user.username}}</span>
+
                     <!-- Text Links -->
                     <ul class="navbar-nav patient-nav-links me-lg-3">
                         <li class="nav-item"><a href="#" class="nav-link">Edit Profile</a></li>
@@ -391,7 +427,7 @@
             <div class="col-lg-10 col-md-12">
                 <!-- NEW "Bright White" Card -->
                 <div class="availability-card-white">
-                    
+
                     <!-- Doctor Details (now with dark text) -->
                     <div class="details-text mb-4">
                         <p><strong>Doctor Name:</strong> Dr. Abcde</p>
@@ -402,15 +438,16 @@
                     <h2 class="h3 mb-4 section-divider">
                         Available Slots
                     </h2>
-                    
+
                     <!-- This div holds the new grid layout -->
                     <div id="availability-grid" class="space-y-4">
                         <!-- Rows will be injected here by JavaScript -->
                     </div>
 
                     <!-- Book Button & Message Area -->
-                    <div class="mt-4 pt-4 section-divider d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
-                        
+                    <div
+                        class="mt-4 pt-4 section-divider d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+
                         <!-- Success/Error Message Box -->
                         <div id="message-box" class="text-center text-sm-start fw-bold h5 mb-0" style="color: #1f2937;">
                             &nbsp; <!-- Placeholder for height -->
@@ -433,16 +470,8 @@
 
     <script>
         // --- DATA ---
-        // 'available' (green), 'unavailable' (red)
-        const availabilityData = [
-            { date: '21/01/2025', morning: 'available', evening: 'unavailable' },
-            { date: '22/01/2025', morning: 'unavailable', evening: 'available' },
-            { date: '23/01/2025', morning: 'unavailable', evening: 'available' },
-            { date: '24/01/2025', morning: 'unavailable', evening: 'available' },
-            { date: '25/01/2025', morning: 'available', evening: 'unavailable' },
-            { date: '26/01/2025', morning: 'available', evening: 'available' },
-            { date: '27/01/2025', morning: 'unavailable', evening: 'available' }
-        ];
+        const availabilityData = {{ slots | tojson | safe }};
+        const days = {{ days | tojson | safe }};
 
         // --- DOM Elements ---
         const gridContainer = document.getElementById('availability-grid');
@@ -451,10 +480,10 @@
 
         // --- State ---
         let selectedSlotElement = null; // To keep track of the currently selected slot
-        
+
         // --- CSS Classes ---
         const selectedClass = 'btn-slot-selected-bright'; // Use new "bright" class
-        
+
         /**
          * Renders the availability grid based on the data
          */
@@ -474,7 +503,7 @@
                         statusClasses = 'btn-unavailable-bright'; // Use new "bright" unavailable class
                         extraAttrs = 'disabled';
                     }
-                    
+
                     return `
                         class="${baseClasses} ${statusClasses}"
                         data-status="${status}"
@@ -527,11 +556,11 @@
                 if (selectedSlotElement) {
                     selectedSlotElement.classList.remove(selectedClass);
                 }
-    
+
                 // Add selection to the new slot
                 clickedSlot.classList.add(selectedClass);
                 selectedSlotElement = clickedSlot;
-    
+
                 // Enable the book button
                 bookButton.disabled = false;
             }
@@ -544,14 +573,14 @@
             if (selectedSlotElement) {
                 const date = selectedSlotElement.dataset.date;
                 const time = selectedSlotElement.dataset.time;
-                
+
                 // Show a confirmation message (now in dark text)
                 messageBox.textContent = `Booking for ${date} (${time}) confirmed!`;
                 messageBox.style.color = '#15803d'; // Vibrant Green
 
                 // Reset
                 selectedSlotElement.classList.remove(selectedClass);
-                
+
                 // Make the booked slot unavailable (for this session)
                 selectedSlotElement.classList.remove('btn-available-bright', 'time-slot');
                 selectedSlotElement.classList.add('btn-unavailable-bright');
@@ -586,7 +615,55 @@
         // 2. Attach listeners to the newly rendered elements
         addEventListeners();
 
+        function convertToGrid(slots) {
+            const grid = {};
+
+            slots.forEach(s => {
+                if (!grid[s.date]) {
+                    grid[s.date] = { morning: "unavailable", evening: "unavailable" };
+                }
+
+                grid[s.date][s.slot] = s.is_available ? "available" : "unavailable";
+            });
+
+            return grid;
+        }
+
+        function renderAvailabilityGrid() {
+            let html = "";
+
+            next7Days.forEach(date => {
+                const daySlots = gridData[date] || {
+                    morning: "unavailable",
+                    evening: "unavailable"
+                };
+
+                html += `
+            <div class="availability-row">
+                <div class="slot-date">${date}</div>
+                <div class="slot-buttons-wrapper">
+                    <button class="btn-slot-bright ${daySlots.morning === 'available' ? 'btn-available-bright time-slot' : 'btn-unavailable-bright'}" 
+                            data-date="${date}" data-time="morning" ${daySlots.morning === 'available' ? '' : 'disabled'}>
+                        Morning
+                    </button>
+
+                    <button class="btn-slot-bright ${daySlots.evening === 'available' ? 'btn-available-bright time-slot' : 'btn-unavailable-bright'}" 
+                            data-date="${date}" data-time="evening" ${daySlots.evening === 'available' ? '' : 'disabled'}>
+                        Evening
+                    </button>
+                </div>
+            </div>
+        `;
+            });
+
+            gridContainer.innerHTML = html;
+        }
+
+
+        const gridData = convertToGrid(availabilityData);
+
+
     </script>
 </body>
-</html>
 
+</html>

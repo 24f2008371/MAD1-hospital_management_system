@@ -21,13 +21,13 @@ from application.controllers import * #2 controllers
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        if not User.query.filter_by(username='admin').first():
-            user1 = User(username = 'admin', password = '1234', type = 'admin')
-            db.session.add(user1)
-            db.session.commit()
-            print("Database created and admin user added!")
+    # with app.app_context():
+    #     db.create_all()
+    #     if not User.query.filter_by(username='admin').first():
+    #         user1 = User(username = 'admin', password = '1234', type = 'admin')
+    #         db.session.add(user1)
+    #         db.session.commit()
+    #         print("Database created and admin user added!")
     app.run() 
 
 
