@@ -5,18 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incorrect Password</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
+    
     <style>
-        /* General Body Styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-image: linear-gradient(-45deg, #ff0000 0%, #0800ff 50%, #001aff 100%);
+            background-color: #f8f9fa; /* Light grey background */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -24,98 +21,10 @@
             padding: 1rem;
         }
 
-        /* Glassmorphism Card Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
+        .card {
+            border: none;
+            border-radius: 0.75rem; /* Thode rounded corners */
         }
-        
-        /* Error Icon Styles */
-        .icon-container {
-            width: 80px;
-            height: 80px;
-            background-color: rgba(255, 82, 82, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255, 82, 82, 0.5);
-        }
-
-        /* Custom "Go Back" Button */
-        .btn-go-back {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: white;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block; /* Ensures proper padding and sizing */
-        }
-
-        .btn-go-back:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Styles from your original stylesheet for project consistency */
-        /* Form Control Styles */
-        .form-control {
-            background: rgba(255, 255, 255, 0.14) !important;
-            border: 1px solid transparent !important;
-            color: white !important;
-        }
-
-        .form-control::placeholder {
-            color: #e5e7eb;
-        }
-
-        .form-control:focus {
-            border-color: white !important;
-            box-shadow: none !important;
-            background: rgba(255, 255, 255, 0.2) !important;
-        }
-
-        /* Dashboard Table Styles */
-        .table-cards {
-            border-collapse: separate;
-            border-spacing: 0 0.5rem;
-        }
-
-        .table-cards td {
-            background: rgba(255, 255, 255, 0.07);
-            padding: 0.75rem 1.25rem;
-            vertical-align: middle;
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
-            color: #ffffff;
-        }
-
-        .table-cards tr td:first-child {
-            border-top-left-radius: 0.75rem;
-            border-bottom-left-radius: 0.75rem;
-        }
-
-        .table-cards tr td:last-child {
-            border-top-right-radius: 0.75rem;
-            border-bottom-right-radius: 0.75rem;
-        }
-
-        .table-cards tbody tr:hover td {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.551);
-            color: rgb(0, 0, 0);
-        }
-
     </style>
 </head>
 
@@ -124,20 +33,19 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-5">
-                <div class="card glass-card text-center p-4 p-md-5">
-                    <!-- Icon SVG for Visual Feedback -->
-                    <div class="icon-container mx-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#ff5252" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                <div class="card shadow-sm text-center p-4 p-md-5">
+                    
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="var(--bs-danger)" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                             <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                         </svg>
                     </div>
 
-                    <h2 class="fw-bold mb-3 mt-4">Incorrect Password!</h2>
-                    <p class="mb-4 text-white-50">The password you entered is incorrect. Please check your credentials and try again.</p>
+                    <h2 class="fw-bold text-dark mb-3 mt-4">Incorrect Password!</h2>
+                    <p class="mb-4 text-muted">The password you entered is incorrect. Please check your credentials and try again.</p>
                     
-                    <!-- Styled Anchor Tag for Navigation -->
                     <div class="d-grid">
-                        <a href="/login" class="btn btn-go-back">Go Back to Login</a>
+                        <a href="/login" class="btn btn-primary">Go Back to Login</a>
                     </div>
                 </div>
             </div>
@@ -145,5 +53,4 @@
     </div>
 
 </body>
-
 </html>

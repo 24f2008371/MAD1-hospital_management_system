@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Availability - {{ doctor.doctor_name }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.75rem;
+        }
+
+        .slot-btn {
+            width: 160px;
+            font-weight: 600;
+        }
+
+        .slot-available {
+            border: 2px solid #198754;
+            color: #198754;
+            background: #e9f9e9;
+        }
+
+        .slot-available:hover {
+            background: #d4f4d4;
+            color: #198754;
+        }
+
+        .slot-booked {
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            background: #ffe9e9;
+            cursor: not-allowed;
+        }
+
+        .slot-selected {
+            border: 2px solid #0d6efd !important;
+            background: #cfe2ff !important;
+            color: #084298 !important;
+            box-shadow: 0 0 0 3px rgba(13,110,253,.25);
+        }
+
+        .date-box {
+            width: 150px;
+            padding: 10px 0;
+            background: #e9ecef;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #343a40;
+        }
+    </style>
+
+    <script>
+        function selectSlot(slotId) {
+            // Remove selected class from all buttons
+            document.querySelectorAll(".slot-btn.slot-available").forEach(btn => {
+                btn.classList.remove("slot-selected");
+            });
+
+            const clickedButton = document.getElementById("slot-" + slotId);
+
+            if (clickedButton) {
+                clickedButton.classList.add("slot-selected");
+
+                // UPDATE FORM ACTION → CORRECT URL
+                document.getElementById("bookForm").action = "/book_slot/" + slotId;
+
+                // ENABLE BOOK BUTTON
+                document.getElementById("bookButton").disabled = false;
+            }
+        }
+    </script>
+</head>
+
+<body class="p-4">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4" style="border-radius: 0.75rem;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/patient">
+                <img src="{{ url_for('static', filename='logo2.png') }}" alt="Logo" style="height: 40px; border-radius: 50%;">
+                <span class="fw-bold ms-2">MediCare</span>
+            </a>
+
+            <div class="collapse navbar-collapse" id="patientNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item d-none d-lg-block">
+                        <span class="navbar-text fw-bold me-3">Welcome, {{ this_user.username }}!</span>
+                    </li>
+                    <li class="nav-item"><a href="/edit_profile" class="nav-link">Edit Profile</a></li>
+                    <li class="nav-item"><a href="/patient_history" class="nav-link">History</a></li>
+                    <li class="nav-item">
+                        <a href="/login" class="btn btn-outline-danger ms-lg-2">
+                            Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="container-fluid">
+
+        <div class="d-flex align-items-center mb-4">
+            <a href="/patient" class="btn btn-secondary me-3"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            <div>
+                <h2 class="fw-bold mb-0">{{ doctor.doctor_name }}</h2>
+                <p class="text-muted fs-5 mb-0">Check available slots</p>
+            </div>
+        </div>
+
+        <div class="card p-4 shadow-sm mt-3">
+
+            <h4 class="mb-3 pb-3 border-bottom">Availability</h4>
+
+            {% if slots %}
+                {% for d in next_days %}
+                <div class="row align-items-center py-3 {% if not loop.last %}border-bottom{% endif %}">
+
+                    <!-- DATE BOX -->
+                    <div class="col-md-3">
+                        <div class="date-box mx-auto mx-md-0">{{ d }}</div>
+                    </div>
+
+                    {% set morning = slots_map.get((d, 'morning')) %}
+                    {% set evening = slots_map.get((d, 'evening')) %}
+
+
+                    {% for s in slots %}
+                        {% if s.date == d and s.slot == "morning" %}
+                            {% set morning = s %}
+                        {% endif %}
+                        {% if s.date == d and s.slot == "evening" %}
+                            {% set evening = s %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- SLOTS SECTION -->
+                    <div class="col-md-9 d-flex flex-wrap gap-3 mt-3 mt-md-0">
+
+                        {% if morning %}
+                            <button id="slot-{{ morning.id }}"
+                                class="slot-btn btn
+                                {% if morning.is_available %}
+                                    slot-available
+                                {% else %}
+                                    slot-booked
+                                {% endif %}"
+                                onclick="selectSlot({{ morning.id }})"
+                                {% if not morning.is_available %}disabled{% endif %}>
+                                08:00 – 12:00 AM
+                            </button>
+                        {% else %}
+                            <button class="slot-btn btn btn-outline-secondary" disabled>No Morning Slot</button>
+                        {% endif %}
+
+                        {% if evening %}
+                            <button id="slot-{{ evening.id }}"
+                                class="slot-btn btn
+                                {% if evening.is_available %}
+                                    slot-available
+                                {% else %}
+                                    slot-booked
+                                {% endif %}"
+                                onclick="selectSlot({{ evening.id }})"
+                                {% if not evening.is_available %}disabled{% endif %}>
+                                04:00 – 09:00 PM
+                            </button>
+                        {% else %}
+                            <button class="slot-btn btn btn-outline-secondary" disabled>No Evening Slot</button>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- BOOKING BUTTON -->
+                <div class="text-end mt-4 pt-4 border-top">
+                    <form id="bookForm" method="GET">
+                        <button class="btn btn-success btn-lg" type="submit" id="bookButton" disabled>
+                            <i class="fa-solid fa-calendar-check me-2"></i> Book Selected Slot
+                        </button>
+                    </form>
+                </div>
+
+            {% else %}
+                <div class="alert alert-info">No slots available for this doctor.</div>
+            {% endif %}
+        </div>
+
+    </main>
+
+</body>
+</html>

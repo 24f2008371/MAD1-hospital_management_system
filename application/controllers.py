@@ -146,13 +146,14 @@ def doctor_dash():
         return redirect("/login")
 
     # Get the current logged in user - doctor
+    this_user = User.query.get(user_id)
     doctor = Doctor.query.filter_by(user_id=user_id).first()
 
     if not doctor:
         flash("Doctor profile not found!", "danger")
         return redirect("/login")
 
-    return render_template("doctor_dash.html", doctor=doctor)
+    return render_template("doctor_dash.html", doctor=doctor, this_user=this_user)
 
 
 
@@ -350,15 +351,18 @@ def add_doctor():
             db.session.add(new_user)
             db.session.commit()
 
-            department_name = department
-            department = Department.query.filter_by(name=name).first()
+            department_name = request.form.get("department")    # e.g. "Cardiology"
+
+            # Fetch correct department
+            department = Department.query.filter_by(name=department_name).first()
+
+            # If not found, create new department
             if not department:
-                department = Department(
-                    name=name,
-                    description = description
-                )
+                department = Department(name=department_name, description="No description provided")
                 db.session.add(department)
                 db.session.commit()
+
+
 
             doctor = Doctor(
                 doctor_name = username,
@@ -378,18 +382,29 @@ def add_doctor():
     return render_template("add_new_doc.html")
 
 # endpoints for departments
-@app.route("/cardiology")
-def cardiology():
-    return render_template("cardiology.html")
-@app.route("/neurology")
-def neurology():
-    return render_template("neurology.html")
-@app.route("/oncology")
-def oncology():
-    return render_template("oncology.html")
-@app.route("/general")
-def general():
-    return render_template("general.html")
+
+@app.route("/department/<string:dept_name>")
+def department_page(dept_name):
+    user_id = session.get("user_id")
+    this_user = User.query.get(user_id)
+
+    dept = Department.query.filter_by(name=dept_name).first()
+
+    if not dept:
+        flash("Department not found!", "danger")
+        return redirect("/patient")
+
+    # Get ALL doctors in this department
+    doctors = Doctor.query.filter_by(department_id=dept.id).all()
+
+    return render_template("department_page.html", department=dept, doctors=doctors, this_user = this_user)
+
+# endpoint for doctor_details
+
+@app.route("/doctor/details/<int:doctor_id>")
+def doctor_details(doctor_id):
+    doctor = Doctor.query.get_or_404(doctor_id)
+    return render_template("doctor_details.html", doctor=doctor)
 
 
 # --- NEW ENQUIRY SUBMISSION ENDPOINT ---
@@ -504,14 +519,29 @@ def doctor_set_availability():
 def patient_check_availability(doctor_id):
     doctor = Doctor.query.get_or_404(doctor_id)
 
-    # Next 7 days
+    user_id = session.get("user_id")
+    this_user = User.query.get(user_id) if user_id else None
+
     from datetime import datetime, timedelta
     today = datetime.today()
     next_days = [(today + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
 
-    slots = Availability.query.filter_by(doctor_id=doctor.id).all()
+    slots = Availability.query.filter(
+        Availability.doctor_id == doctor.id,
+        Availability.date.in_(next_days)
+    ).all()
 
-    return render_template("patient_check_availability.html",doctor=doctor, next_days=next_days,slots=slots)
+    slots_map = {(s.date, s.slot): s for s in slots}
+
+    # Pass slots_map to template
+    return render_template(
+        "patient_check_availability.html",
+        doctor=doctor,
+        next_days=next_days,
+        slots_map=slots_map,   # ⭐ VERY IMPORTANT ⭐
+        this_user=this_user
+    )
+
 
 
 # BOOK SLOT ROUTE

@@ -6,668 +6,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediCare - Admin Dashboard</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
-        /* I used AI's help for styling  the ui */
-
-        /* Sets the flawless, fixed gradient for the entire page */
-        html {
-            min-height: 100vh;
-            background-image: linear-gradient(45deg, #ff2a00 0%, #cc00ff 50%, #001aff 100%);
-            background-attachment: fixed;
-            background-size: cover;
-        }
-
-        /* =================================== */
-        /* 1. Global & Body Styles             */
-        /* =================================== */
-
-        /* Default body style, primarily for the login page */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: transparent;
-            min-height: 100vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow: hidden;
+            background-color: #f8f9fa; /* Light grey background */
         }
 
-        /* Override body styles specifically for the multi-section landing page */
-        body.landing-page {
-            display: block;
-            padding: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-color: transparent;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-
-        /* =================================== */
-        /* 2. Reusable Components              */
-        /* =================================== */
-
-        /* 2.1 Glassmorphism Card Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(25px);
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            z-index: 10;
-        }
-
-        /* 2.2 Buttons (Primary & Secondary) */
-        .btn-login {
-            color: #4a00e0;
-            background: #fff;
+        .card {
             border: none;
-            padding: 0.7rem 1.2rem;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
+            border-radius: 0.75rem; /* Thode rounded corners */
         }
-
-        .btn-login:hover,
-        .btn-login:focus {
-            color: #fff;
-            background: #4a00e0;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.3);
-        }
-
-        .btn-register {
-            display: block;
-            text-align: center;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(4px);
-            padding: 0.7rem 1.2rem;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 0.5rem;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .btn-register:hover,
-        .btn-register:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .btn-login:active,
-        .btn-register:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 2.3 Form Elements */
-        .form-control-glass {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            color: white !important;
-            border-radius: 0.75rem !important;
-            padding-left: 3rem;
-        }
-
-        .form-control-glass::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .form-control-glass:focus {
-            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.2) !important;
-        }
-
-        .input-group-text-custom {
-            position: absolute;
-            top: 50%;
-            left: 1rem;
-            transform: translateY(-50%);
-            background: transparent;
-            border: 0;
-            z-index: 10;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-
-        /* =================================== */
-        /* 3. Landing Page Sections            */
-        /* =================================== */
-
-        /* 3.1 Navigation Bar */
-        .navbar.glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 1rem;
-            width: 90%;
-            margin: 1rem auto 0 auto;
-        }
-
-        .navbar .navbar-brand span,
-        .navbar .nav-link:hover,
-        .navbar .nav-link.active {
-            color: #fff !important;
-        }
-
-        .navbar .nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .navbar .btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        /* 3.2 Hero Section */
-        .hero-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 120px 1rem 60px 1rem;
-            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-section .col-lg-10 {
-            width: 100%;
-        }
-
-        .hero-cta-buttons .btn {
-            margin: 0.5rem;
-        }
-
-        /* 3.3 Features Section */
-        .features-section {
-            padding: 6rem 1rem;
-        }
-
-        .features-section .text-white-80 {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 1.25rem;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            height: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            color: #fff;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
-
-        /* 3.4 Footer Section */
-        .footer-section {
-            padding: 3rem 1rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .footer-social a {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.2rem;
-            margin-left: 1.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .footer-social a:hover {
-            color: #fff;
-        }
-
-        /* 3.5 About Us Section */
-        .about-section {
-            padding: 3rem 1rem;
-            color: white;
-        }
-
-        .about-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(30px);
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            z-index: 10;
-        }
-
-        .about-values li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.25rem;
-        }
-
-        .about-values .icon-circle {
-            width: 50px;
-            height: 50px;
-            flex-shrink: 0;
-            margin-right: 1.25rem;
-            display: grid;
-            place-items: center;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .about-values .icon-circle i {
-            font-size: 1.5rem;
-            color: #fff;
-        }
-
-        .about-values span {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-
-        /* =================================== */
-        /* 4. Login Page Specifics             */
-        /* =================================== */
-
-        .card-header-custom {
-            border-bottom: 0;
-            padding-bottom: 0;
-            text-align: center;
-        }
-
-        .logo-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-
-        /* =================================== */
-        /* 5. ADMIN DASHBOARD STYLES (NEW)     */
-        /* =================================== */
-
-        .admin-navbar {
-            /* This applies the glass-card style but we can override it */
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(30px);
-            border-radius: 1rem;
-            width: calc(100% - 2rem);
-            margin: 1rem auto 0 auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 1000;
-        }
-
-        .admin-title {
-            color: #fff;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .search-bar {
-            padding: 1.5rem 2rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Custom form for admin: light bg, dark text */
-        .form-control-admin {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
-        }
-
-        .form-control-admin::placeholder {
-            color: #6c757d;
-        }
-
-        .content-card {
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .content-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.25rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .content-card-header h3 {
-            margin: 0;
-            color: #fff;
-            font-weight: 600;
-        }
-
-        /* Custom Admin List */
-        .admin-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .admin-list-item {
-            background: rgba(0, 0, 0, 0.15);
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .admin-list-item:hover {
-            background: rgba(0, 0, 0, 0.25);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .admin-list-item-name {
-            color: #fff;
-            font-weight: 500;
-            font-size: 1.1rem;
-        }
-
-        .admin-list-item .btn {
-            font-size: 0.8rem;
-            padding: 0.3rem 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: none;
-            transition: all 0.2s ease;
-        }
-
-        /* "Cool" Button Colors */
-        .btn-create {
-            background-color: #198754;
-            color: white;
-        }
-
-        .btn-create:hover {
-            background-color: #157347;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .btn-edit {
-            background-color: #ffc107;
-            color: #333;
-        }
-
-        .btn-edit:hover {
-            background-color: #e0a800;
-            color: #333;
-            transform: scale(1.05);
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .btn-delete:hover {
-            background-color: #b02a37;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .btn-blacklist {
-            background-color: #495057;
-            color: white;
-        }
-
-        .btn-blacklist:hover {
-            background-color: #343a40;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .btn-view {
-            /* Use the btn-register style for consistency */
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 0.3rem 0.75rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .btn-view:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        /* "Glass" Table Style */
-        .table-glass {
-            background-color: rgba(0, 0, 0, 0.15);
-            color: white;
-            border-radius: 0.75rem;
-            overflow: hidden;
-            /* Ensures border-radius applies to table corners */
-        }
-
-        .table-glass th {
-            background-color: rgba(0, 0, 0, 0.2);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.2) !important;
-        }
-
-        .table-glass td,
-        .table-glass th {
-            border-color: rgba(255, 255, 255, 0.1) !important;
-            vertical-align: middle;
-        }
-
-        .table-glass tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .table-glass .btn-view {
-            width: 100%;
-        }
-
-        /* Action Buttons */
-        .btn-action {
-            padding: 4px 10px;
-            font-size: 0.85rem;
-            border-radius: 6px;
+        
+        /* Buttons ke beech thodi spacing */
+        .admin-buttons .btn {
             margin-left: 6px;
-            color: white;
-            font-weight: 600;
-        }
-
-        .btn-edit {
-            background-color: #f4c542;
-            color: rgb(38, 38, 38);
-            /* Yellow */
-        }
-
-        .btn-delete {
-            background-color: #e74c3c;
-            /* Red */
-        }
-
-        .btn-blacklist {
-            background-color: #555;
-            /* Grey */
-        }
-
-        .admin-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 14px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-        }
-
-        .admin-buttons {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .glass-modal {
-            background: rgba(255, 255, 255, 0.15) !important;
-            backdrop-filter: blur(25px) !important;
-            border-radius: 1rem;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-        }
-
-        .form-control-glass {
-            background: rgba(255, 255, 255, 0.15) !important;
-            color: #fff !important;
-            border: 1px solid rgba(255, 255, 255, 0.35) !important;
         }
     </style>
 </head>
 
-<!-- We use 'landing-page' class to get the correct body layout (display: block) -->
+<body class="p-4">
 
-
-<body class="landing-page">
-
-
-    <!-- EDIT PATIENT MODAL -->
     <div class="modal fade" id="editPatientModal" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content glass-modal">
+            <div class="modal-content">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Patient</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <form id="editPatientForm" method="post">
                     <div class="modal-body">
-
                         <div class="mb-3">
                             <label class="form-label">Full Name</label>
-                            <input type="text" id="editName" name="name" class="form-control form-control-glass">
+                            <input type="text" id="editName" name="name" class="form-control">
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Age</label>
-                            <input type="number" id="editAge" name="age" class="form-control form-control-glass">
+                            <input type="number" id="editAge" name="age" class="form-control">
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Gender</label>
-                            <select id="editGender" name="gender" class="form-control form-control-glass">
+                            <select id="editGender" name="gender" class="form-control">
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Phone</label>
-                            <input type="text" id="editPhone" name="phone" class="form-control form-control-glass">
+                            <input type="text" id="editPhone" name="phone" class="form-control">
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" id="editEmail" name="email" class="form-control form-control-glass">
+                            <input type="email" id="editEmail" name="email" class="form-control">
                         </div>
-
                     </div>
-
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
-
                 </form>
 
             </div>
         </div>
     </div>
 
-    <!-- For the modal -->
     <script>
         function openEditModal(id, name, age, gender, phone, email) {
-
-            // Fill form
             document.getElementById("editName").value = name;
             document.getElementById("editAge").value = age;
             document.getElementById("editGender").value = gender;
             document.getElementById("editPhone").value = phone;
             document.getElementById("editEmail").value = email;
-
-            // Set correct action route
             document.getElementById("editPatientForm").action = "/edit_patient/" + id;
-
-            // Show modal
             var modal = new bootstrap.Modal(document.getElementById("editPatientModal"));
             modal.show();
         }
     </script>
 
-    <!-- Added new doctor message! -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class="container mt-3">
         {% for category, message in messages %}
         <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show shadow-sm"
             role="alert" style="border-radius: 10px; font-weight: 500; font-size: 1rem;">
-            <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+            {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endfor %}
@@ -675,29 +109,23 @@
     {% endif %}
     {% endwith %}
 
-    <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg admin-navbar navbar-dark sticky-top"
-        style="width: 93%; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4"
+        style="border-radius: 0.75rem;">
         <div class="container-fluid">
-            <!-- Logo -->
             <a class="navbar-brand" href="/">
                 <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
                 <span class="fw-bold ms-2">MediCare Admin</span>
             </a>
-
-            <!-- Navbar Toggler -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="adminNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/login" class="btn btn-login ms-lg-2">Logout <i
+                        <a href="/login" class="btn btn-outline-danger ms-lg-2">Logout <i
                                 class="fa-solid fa-right-from-bracket ms-1"></i></a>
                     </li>
                 </ul>
@@ -705,171 +133,146 @@
         </div>
     </nav>
 
-    <!-- Main Dashboard Content -->
-    <main class="container-fluid p-4 p-md-5">
+    <main class="container-fluid">
 
-        <!-- Main Title -->
-        <h1 class="admin-title">Admin Dashboard</h1>
+        <h2 class="mb-4">Admin Dashboard</h2>
 
-        <!-- Search Bar -->
-        <div class="glass-card search-bar" style="display: flex; justify-content: space-between;">
-            <h1 class="text-white h3 fw-bold">Welcome, {{this_user.username}}!</h1>
-            <form class="d-flex w-50" method="get" action="/admin">
-                <input name="q" class="form-control me-2 form-control-admin" type="text"
-                    placeholder="Search doctor/patient..." value="{{ q }}">
-                <button class="btn btn-login" type="submit">Search</button>
-            </form>
+        <div class="card shadow-sm p-3 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-bold">Welcome, {{this_user.username}}!</h4>
+                <form class="d-flex w-50" method="get" action="/admin">
+                    <input name="q" class="form-control me-2" type="text"
+                        placeholder="Search doctor/patient..." value="{{ q }}">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            </div>
         </div>
 
-        <!-- Dashboard Widgets -->
         <div class="row">
 
-            <!-- Left Column (Doctors & Patients) -->
             <div class="col-lg-7">
 
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-user-doctor me-2"></i> Registered Doctors</h3>
-                        <button class="btn btn-create"><i class="fa-solid fa-plus me-1"></i><a href="/add_doctor"
-                                style="color: white;">Create New</a></button>
+                <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <h4 class="mb-0"><i class="fa-solid fa-user-doctor me-2"></i> Registered Doctors</h4>
+                        <a href="/add_doctor" class="btn btn-success"><i class="fa-solid fa-plus me-1"></i>Create New</a>
                     </div>
 
-                    <ul class="admin-list">
+                    <ul class="list-group list-group-flush">
                         {% if doctors %}
                         {% for d in doctors %}
-                        <li class="admin-list-item">
-
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div>
                                 <strong>{{ d.doctor_name }}</strong>
                                 <br>
-                                <small style="color: #ddd;">{{ d.email }}</small>
+                                <small class="text-muted">{{ d.email }}</small>
                             </div>
-
                             <div class="admin-buttons">
-                                <a href="/edit_doctor/{{ d.id }}" class="btn-action btn-edit">edit</a>
-                                <a href="/delete_doctor/{{ d.id }}" class="btn-action btn-delete">delete</a>
-                                <a href="/blacklist_doctor/{{ d.id }}" class="btn-action btn-blacklist">blacklist</a>
+                                <a href="/edit_doctor/{{ d.id }}" class="btn btn-sm btn-warning">edit</a>
+                                <a href="/delete_doctor/{{ d.id }}" class="btn btn-sm btn-danger">delete</a>
+                                <a href="/blacklist_doctor/{{ d.id }}" class="btn btn-sm btn-dark">blacklist</a>
                             </div>
-
                         </li>
                         {% endfor %}
                         {% else %}
-                        <li>No doctors found.</li>
+                        <li class="list-group-item px-0 text-muted">No doctors found.</li>
                         {% endif %}
                     </ul>
-
-
                 </div>
 
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-user-injured me-2"></i> Registered Patients</h3>
+                <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <h4 class="mb-0"><i class="fa-solid fa-user-injured me-2"></i> Registered Patients</h4>
                     </div>
-
-                    <ul class="admin-list">
+                    <ul class="list-group list-group-flush">
                         {% if patients %}
                         {% for p in patients %}
-                        <li class="admin-list-item">
-
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div>
                                 <strong>{{ p.name }}</strong>
                                 <br>
-                                <small style="color: #ddd;">{{ p.email }}</small>
+                                <small class="text-muted">{{ p.email }}</small>
                             </div>
-
                             <div class="admin-buttons">
-                                <a href="/edit_patient/{{ p.id }}" class="btn-action btn-edit">edit</a>
-                                <a href="/delete_patient/{{ p.id }}" class="btn-action btn-delete">delete</a>
-                                <a href="/blacklist_patient/{{ p.id }}" class="btn-action btn-blacklist">blacklist</a>
+                                <a href="/edit_patient/{{ p.id }}" class="btn btn-sm btn-warning">edit</a>
+                                <a href="/delete_patient/{{ p.id }}" class="btn btn-sm btn-danger">delete</a>
+                                <a href="/blacklist_patient/{{ p.id }}" class="btn btn-sm btn-dark">blacklist</a>
                             </div>
-
                         </li>
                         {% endfor %}
                         {% else %}
-                        <li>No Patients found.</li>
+                        <li class="list-group-item px-0 text-muted">No Patients found.</li>
                         {% endif %}
                     </ul>
                 </div>
 
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Patients</h3>
+                <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <h4 class="mb-0"><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Patients</h4>
                     </div>
-
-                    <ul class="admin-list">
+                    <ul class="list-group list-group-flush">
                         {% if blacklisted_patients %}
                         {% for p in blacklisted_patients %}
-                        <li class="admin-list-item">
-
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div>
                                 <strong>{{ p.name }}</strong>
                                 <br>
-                                <small style="color: #ddd;">{{ p.email }}</small>
+                                <small class="text-muted">{{ p.email }}</small>
                             </div>
-
                             <div class="admin-buttons">
-                                <a href="/unblacklist_patient/{{ p.id }}" class="btn-action btn-create">
+                                <a href="/unblacklist_patient/{{ p.id }}" class="btn btn-sm btn-success">
                                     unblacklist
                                 </a>
                             </div>
-
                         </li>
                         {% endfor %}
                         {% else %}
-                        <li>No Blacklisted Patients.</li>
+                        <li class="list-group-item px-0 text-muted">No Blacklisted Patients.</li>
                         {% endif %}
                     </ul>
                 </div>
 
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Doctors</h3>
+                <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <h4 classm="mb-0"><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Doctors</h4>
                     </div>
-
-                    <ul class="admin-list">
+                    <ul class="list-group list-group-flush">
                         {% if blacklisted_doctors %}
                         {% for d in blacklisted_doctors %}
-                        <li class="admin-list-item">
-
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div>
                                 <strong>{{ d.doctor_name }}</strong>
                                 <br>
-                                <small style="color: #ddd;">{{ d.email }}</small>
+                                <small class="text-muted">{{ d.email }}</small>
                             </div>
-
                             <div class="admin-buttons">
-                                <a href="/unblacklist_doctor/{{ d.id }}" class="btn-action btn-create">
+                                <a href="/unblacklist_doctor/{{ d.id }}" class="btn btn-sm btn-success">
                                     unblacklist
                                 </a>
                             </div>
-
                         </li>
                         {% endfor %}
                         {% else %}
-                        <li>No Blacklisted Doctors.</li>
+                        <li class="list-group-item px-0 text-muted">No Blacklisted Doctors.</li>
                         {% endif %}
                     </ul>
                 </div>
-
-
             </div>
 
-
-            <!-- Right Column (Appointments) -->
             <div class="col-lg-5">
-                <div class="glass-card content-card">
-                    <div class="content-card-header">
-                        <h3><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h3>
+                <div class="card shadow-sm p-4 mb-4">
+                    <div class="mb-3 pb-3 border-bottom">
+                        <h4 class="mb-0"><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h4>
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-glass mb-0">
+                        <table class="table table-striped mb-0">
                             <thead>
                                 <tr>
                                     <th scope="col">Sr No.</th>
                                     <th scope="col">Patient</th>
                                     <th scope="col">Doctor</th>
-                                    <th scope="col">Department</th>
+                                    <th scope="col">Dept</th>
                                     <th scope="col">History</th>
                                 </tr>
                             </thead>
@@ -879,21 +282,21 @@
                                     <td>Mr. Abcde</td>
                                     <td>Dr. Pqrst</td>
                                     <td>Cardiology</td>
-                                    <td><button class="btn btn-view">View</button></td>
+                                    <td><button class="btn btn-sm btn-info">View</button></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">1002.</th>
                                     <td>Miss. Pqrst</td>
                                     <td>Dr. Abcde</td>
                                     <td>Neurology</td>
-                                    <td><button class="btn btn-view">View</button></td>
+                                    <td><button class="btn btn-sm btn-info">View</button></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">1003.</th>
                                     <td>Mr. Lmnop</td>
                                     <td>Dr. Xyz</td>
                                     <td>Orthopedic</td>
-                                    <td><button class="btn btn-view">View</button></td>
+                                    <td><button class="btn btn-sm btn-info">View</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -901,9 +304,7 @@
                 </div>
             </div>
 
-        </div> <!-- /row -->
-
-    </main>
+        </div> </main>
 
 </body>
 
