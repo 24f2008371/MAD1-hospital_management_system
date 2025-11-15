@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, url_for, flash
 from flask import current_app as app # it refers to the app.py
 from sqlalchemy import or_
+from flask import session
 
 from .models import *
 
@@ -12,26 +13,41 @@ def homepage():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
-        username= request.form.get("username")
-        password= request.form.get("password")
-        this_user= User.query.filter_by(username=username).first()
-        if this_user: # if this user exists
+        username = request.form.get("username")
+        password = request.form.get("password")
+        this_user = User.query.filter_by(username=username).first()
+
+        if this_user:
             if this_user.password == password:
+
+                session["user_id"] = this_user.id
+
+                # BLOCK CHECK FOR PATIENT
                 if this_user.type == "patient":
-                    patient = Patient.query.filter_by(user_id = this_user.id).first()
-                    if patient and patient.blocked == True:
+                    patient = Patient.query.filter_by(user_id=this_user.id).first()
+                    if patient and patient.blocked:
                         flash("Your account has been blacklisted by the admin!", "danger")
                         return redirect("/login")
+
+                # BLOCK CHECK FOR DOCTOR  ⭐ FIX HERE ⭐
+                if this_user.type == "doctor":
+                    if this_user.blocked:
+                        flash("Your account has been blacklisted by the admin!", "danger")
+                        return redirect("/login")
+
+                # NORMAL LOGIN FLOW
                 if this_user.type == "admin":
                     return redirect("/admin")
                 elif this_user.type == "doctor":
                     return redirect("/doctor")
                 else:
-                    return render_template("patient_dash.html", username=username,this_user=this_user)
+                    return render_template("patient_dash.html", username=username, this_user=this_user)
+
             else:
                 return render_template("incorrect_p.html")
         else:
-            return render_template("not_exists.html")   
+            return render_template("not_exists.html")
+
     return render_template("login.html")
 
 
@@ -75,12 +91,14 @@ def admin_dash():
 
     # Show normal data if search is empty
     if q == "":
-        doctors = Doctor.query.all()
+        doctors = Doctor.query.join(User).filter(User.blocked == False).all()
+        blacklisted_doctors = Doctor.query.join(User).filter(User.blocked == True).all()
         patients = Patient.query.filter_by(blocked=False).all()
         blacklisted_patients = Patient.query.filter_by(blocked = True).all()
 
     else:
         ilike_q = f"%{q}%" # f-string 
+        
         # in SQL %Ridhi% means jahan bhi Ridhi aaye ____Ridhi_____ 
 
         # or_(...) → SQLAlchemy function jo OR condition banata hai (ya to ye condition ya vo).
@@ -104,17 +122,54 @@ def admin_dash():
 
 
     this_user = User.query.filter_by(type="admin").first()
-    return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q, blacklisted_patients = blacklisted_patients)
+    return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q, blacklisted_patients = blacklisted_patients, blacklisted_doctors = blacklisted_doctors)
+
+
+
 
 @app.route("/doctor")
 def doctor_dash():
     this_user = User.query.filter_by(type="doctor").first()
     return render_template("doctor_dash.html", this_user = this_user)
 
+
+
+
 @app.route("/patient")
 def patient_dash():
     this_user = User.query.filter_by(type="patient").first()
     return render_template("patient_dash.html", this_user = this_user)
+
+
+# EDIT PATIENT PROFILE - ON PATIENT DASHBOARD
+@app.route("/edit_profile", methods=['GET', 'POST'])
+def edit_profile():
+
+    # Fetch logged-in user using session
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")  # if not logged in
+
+    this_user = User.query.get(user_id)
+    patient = Patient.query.filter_by(user_id=user_id).first()
+
+    if request.method == "POST":
+        patient.name = request.form.get("name")
+        patient.email = request.form.get("email")
+        patient.phone = request.form.get("phone")
+        patient.age = request.form.get("age")
+        patient.gender = request.form.get("gender")
+
+        new_pass = request.form.get("password")
+        if new_pass.strip():
+            this_user.password = new_pass
+
+        db.session.commit()
+        flash("Profile updated successfully!", "success")
+        return redirect("/patient")
+
+    return render_template("patient_edit_profile.html", patient=patient, this_user=this_user)
+
 
 # Delete patient route
 @app.route("/delete_patient/<int:id>")
@@ -170,6 +225,73 @@ def unblacklist_patient(id):
     return redirect("/admin")
 
 
+# Edit Doctor Route
+@app.route("/edit_doctor/<int:id>", methods=["GET", "POST"])
+def edit_doctor(id):
+    doctor = Doctor.query.get_or_404(id)
+
+    # Load all departments for dropdown
+    departments = Department.query.all()
+
+    if request.method == "POST":
+        doctor.doctor_name = request.form.get("doctor_name")
+        doctor.email = request.form.get("email")
+        doctor.experience = request.form.get("experience")
+
+        # Department selection (stored as department_id)
+        doctor.department_id = request.form.get("department_id")
+
+        # Password update only if user entered something
+        new_pass = request.form.get("password")
+        if new_pass.strip() != "":
+            doctor.password = new_pass
+
+        db.session.commit()
+        flash("Doctor details updated successfully!", "success")
+        return redirect("/admin")
+
+    return render_template("edit_doctor.html", doctor=doctor, departments=departments)
+
+
+
+# Delete Doctor route
+@app.route("/delete_doctor/<int:id>")
+def delete_doctor(id):
+    doctor = Doctor.query.get_or_404(id)
+
+    db.session.delete(doctor)
+    db.session.commit()
+
+    flash("Doctor deleted successfully!", "danger")
+    return redirect("/admin")
+
+
+# Blacklist doctor route
+@app.route("/blacklist_doctor/<int:id>")
+def blacklist_doctor(id):
+    doctor = Doctor.query.get_or_404(id)
+
+    user = User.query.get(doctor.user_id)
+    user.blocked = True
+
+    db.session.commit()
+    flash("Doctor has been blacklisted!", "warning")
+    return redirect("/admin")
+
+# Unblacklist Doctor route
+@app.route("/unblacklist_doctor/<int:id>")
+def unblacklist_doctor(id):
+    doctor = Doctor.query.get_or_404(id)
+
+    user = User.query.get(doctor.user_id)
+    user.blocked = False
+
+    db.session.commit()
+    flash("Doctor unblacklisted successfully!", "success")
+    return redirect("/admin")
+
+
+
 
 @app.route("/patient_history")
 def patient_history():
@@ -196,7 +318,9 @@ def add_doctor():
             
         this_user = Doctor.query.filter_by(doctor_name=username).first()
         if this_user:
-            return render_template("already_exists.html")
+            flash("Doctor already exists!", "danger")
+            return redirect("/add_doctor")
+
         else:
             new_user = User(username=username, password=password, type="doctor")
             db.session.add(new_user)

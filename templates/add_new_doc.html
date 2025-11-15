@@ -575,6 +575,20 @@
 
     <!-- Main Add Doctor Content -->
     <main class="container p-4 p-md-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="container mb-3">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"
+                style="font-weight:600; border-radius:10px;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
 
         <!-- Main Title -->
         <h1 class="admin-title text-center">Add a New Doctor</h1>

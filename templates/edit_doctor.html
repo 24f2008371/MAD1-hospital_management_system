@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Edit Doctor</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
+
+    <style>
+        html {
+            min-height: 100vh;
+            background-image: linear-gradient(45deg, #ff2a00 0%, #cc00ff 50%, #001aff 100%);
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        body {
+            font-family: Inter, sans-serif;
+            background: transparent;
+        }
+
+        .admin-navbar {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border-radius: 1rem;
+            width: 90%;
+            margin: 1rem auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-title {
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 2rem;
+            color: white;
+        }
+
+        .form-control-admin,
+        .form-select-admin {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #333;
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: #333;
+            padding: 0.7rem 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 0.5rem;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-register {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.7rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+
+        .btn-register:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    </style>
+</head>
+
+<body class="landing-page">
+
+    <!-- Admin Navbar -->
+    <nav class="navbar navbar-expand-lg admin-navbar navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">
+                <img src="../static/logo2.png" style="height: 40px; border-radius: 50%;">
+                <span class="fw-bold ms-2">MediCare Admin</span>
+            </a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/admin">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Edit Doctor</a></li>
+                    <li class="nav-item"><a href="/login" class="btn btn-login ms-lg-2">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container p-4 p-md-5">
+        <h1 class="admin-title mb-4">Edit Doctor</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="glass-card">
+
+                    <form method="POST">
+
+                        <!-- Doctor Name -->
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="doctor_name"
+                                class="form-control form-control-admin"
+                                value="{{ doctor.doctor_name }}" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control form-control-admin"
+                                value="{{ doctor.email }}" required>
+                        </div>
+
+                        <!-- Experience -->
+                        <div class="mb-3">
+                            <label class="form-label">Experience (years)</label>
+                            <input type="number" name="experience" class="form-control form-control-admin"
+                                value="{{ doctor.experience }}" required>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="mb-3">
+                            <label class="form-label">Department</label>
+                            <select name="department_id" class="form-select form-control-admin" required>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}"
+                                    {% if dept.id == doctor.department_id %}selected{% endif %}>
+                                    {{ dept.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label class="form-label">Change Password (optional)</label>
+                            <input type="password" name="password"
+                                class="form-control form-control-admin"
+                                placeholder="Leave blank to keep old password">
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/admin" class="btn-register"><i class="fa-solid fa-xmark me-2"></i>Cancel</a>
+                            <button type="submit" class="btn-edit"><i class="fa-solid fa-check me-2"></i> Save Changes</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

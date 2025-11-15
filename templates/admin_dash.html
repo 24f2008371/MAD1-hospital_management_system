@@ -683,7 +683,7 @@
         style="width: 93%; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);">
         <div class="container-fluid">
             <!-- Logo -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
                 <span class="fw-bold ms-2">MediCare Admin</span>
             </a>
@@ -730,7 +730,6 @@
             <!-- Left Column (Doctors & Patients) -->
             <div class="col-lg-7">
 
-                <!-- Registered Doctors -->
                 <div class="glass-card content-card">
                     <div class="content-card-header">
                         <h3><i class="fa-solid fa-user-doctor me-2"></i> Registered Doctors</h3>
@@ -743,14 +742,12 @@
                         {% for d in doctors %}
                         <li class="admin-list-item">
 
-                            <!-- LEFT SIDE: Doctor Info -->
                             <div>
                                 <strong>{{ d.doctor_name }}</strong>
                                 <br>
                                 <small style="color: #ddd;">{{ d.email }}</small>
                             </div>
 
-                            <!-- RIGHT SIDE: Action Buttons -->
                             <div class="admin-buttons">
                                 <a href="/edit_doctor/{{ d.id }}" class="btn-action btn-edit">edit</a>
                                 <a href="/delete_doctor/{{ d.id }}" class="btn-action btn-delete">delete</a>
@@ -767,7 +764,6 @@
 
                 </div>
 
-                <!-- Registered Patients -->
                 <div class="glass-card content-card">
                     <div class="content-card-header">
                         <h3><i class="fa-solid fa-user-injured me-2"></i> Registered Patients</h3>
@@ -778,14 +774,12 @@
                         {% for p in patients %}
                         <li class="admin-list-item">
 
-                            <!-- LEFT SIDE: Doctor Info -->
                             <div>
                                 <strong>{{ p.name }}</strong>
                                 <br>
                                 <small style="color: #ddd;">{{ p.email }}</small>
                             </div>
 
-                            <!-- RIGHT SIDE: Action Buttons -->
                             <div class="admin-buttons">
                                 <a href="/edit_patient/{{ p.id }}" class="btn-action btn-edit">edit</a>
                                 <a href="/delete_patient/{{ p.id }}" class="btn-action btn-delete">delete</a>
@@ -810,14 +804,12 @@
                         {% for p in blacklisted_patients %}
                         <li class="admin-list-item">
 
-                            <!-- LEFT SIDE -->
                             <div>
                                 <strong>{{ p.name }}</strong>
                                 <br>
                                 <small style="color: #ddd;">{{ p.email }}</small>
                             </div>
 
-                            <!-- RIGHT SIDE BUTTON -->
                             <div class="admin-buttons">
                                 <a href="/unblacklist_patient/{{ p.id }}" class="btn-action btn-create">
                                     unblacklist
@@ -832,9 +824,39 @@
                     </ul>
                 </div>
 
+                <div class="glass-card content-card">
+                    <div class="content-card-header">
+                        <h3><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Doctors</h3>
+                    </div>
+
+                    <ul class="admin-list">
+                        {% if blacklisted_doctors %}
+                        {% for d in blacklisted_doctors %}
+                        <li class="admin-list-item">
+
+                            <div>
+                                <strong>{{ d.doctor_name }}</strong>
+                                <br>
+                                <small style="color: #ddd;">{{ d.email }}</small>
+                            </div>
+
+                            <div class="admin-buttons">
+                                <a href="/unblacklist_doctor/{{ d.id }}" class="btn-action btn-create">
+                                    unblacklist
+                                </a>
+                            </div>
+
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <li>No Blacklisted Doctors.</li>
+                        {% endif %}
+                    </ul>
+                </div>
 
 
             </div>
+
 
             <!-- Right Column (Appointments) -->
             <div class="col-lg-5">
@@ -885,7 +907,6 @@
         </div> <!-- /row -->
 
     </main>
-
 
 </body>
 
