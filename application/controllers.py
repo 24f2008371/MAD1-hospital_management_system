@@ -95,6 +95,8 @@ def admin_dash():
         blacklisted_doctors = Doctor.query.join(User).filter(User.blocked == True).all()
         patients = Patient.query.filter_by(blocked=False).all()
         blacklisted_patients = Patient.query.filter_by(blocked = True).all()
+        upcoming = Appointment.query.join(Patient).join(Doctor).all()
+
 
     else:
         ilike_q = f"%{q}%" # f-string 
@@ -134,7 +136,7 @@ def admin_dash():
 
 
     this_user = User.query.filter_by(type="admin").first()
-    return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q, blacklisted_patients = blacklisted_patients, blacklisted_doctors = blacklisted_doctors)
+    return render_template("admin_dash.html", this_user = this_user, doctors = doctors, patients = patients, q=q, blacklisted_patients = blacklisted_patients, blacklisted_doctors = blacklisted_doctors, upcoming = upcoming)
 
 
 
@@ -526,21 +528,20 @@ def patient_check_availability(doctor_id):
     today = datetime.today()
     next_days = [(today + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
 
-    slots = Availability.query.filter(
-        Availability.doctor_id == doctor.id,
-        Availability.date.in_(next_days)
-    ).all()
+    # fetch ALL availability rows for this doctor
+    slots = Availability.query.filter_by(doctor_id=doctor.id).all()
 
-    slots_map = {(s.date, s.slot): s for s in slots}
+    # normalize and build lookup map; .strip() removes stray spaces
+    slots_map = {(s.date.strip(), s.slot.strip()): s for s in slots}
 
-    # Pass slots_map to template
     return render_template(
         "patient_check_availability.html",
         doctor=doctor,
         next_days=next_days,
-        slots_map=slots_map,   # ⭐ VERY IMPORTANT ⭐
+        slots_map=slots_map,
         this_user=this_user
     )
+
 
 
 
@@ -550,7 +551,21 @@ def patient_check_availability(doctor_id):
 def book_slot(slot_id):
     slot = Availability.query.get_or_404(slot_id)
     slot.is_available = False
+
+    user_id = session.get("user_id")
+    patient = Patient.query.filter_by(user_id=user_id).first()
+
+    # Create appointment entry
+    new_appointment = Appointment(
+        patient_id = patient.id,
+        doctor_id = slot.doctor_id,
+        date = slot.date,
+        time = slot.slot   # "morning" / "evening"
+    )
+
+    db.session.add(new_appointment)
     db.session.commit()
 
     flash("Slot booked successfully!", "success")
     return redirect(request.referrer)
+

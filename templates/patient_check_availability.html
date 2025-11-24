@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Doctor Availability - {{ doctor.doctor_name }}</title>
     <meta charset="UTF-8">
@@ -51,7 +52,7 @@
             border: 2px solid #0d6efd !important;
             background: #cfe2ff !important;
             color: #084298 !important;
-            box-shadow: 0 0 0 3px rgba(13,110,253,.25);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, .25);
         }
 
         .date-box {
@@ -63,24 +64,35 @@
             font-weight: 600;
             color: #343a40;
         }
+
+        .slot-btn {
+            width: 230px;
+            /* increased width */
+            font-weight: 600;
+            padding: 14px 0;
+            /* bigger height also looks nicer */
+            font-size: 15px;
+            /* more readable */
+        }
+
+        .slot-missing {
+            border: 2px solid #dc3545;
+            background: #ffe9e9;
+            color: #dc3545;
+            cursor: not-allowed;
+            width: 230px;
+            font-weight: 600;
+            border-radius: 5px;
+        }
     </style>
 
     <script>
         function selectSlot(slotId) {
-            // Remove selected class from all buttons
-            document.querySelectorAll(".slot-btn.slot-available").forEach(btn => {
-                btn.classList.remove("slot-selected");
-            });
-
+            document.querySelectorAll(".slot-btn.slot-available").forEach(btn => btn.classList.remove("slot-selected"));
             const clickedButton = document.getElementById("slot-" + slotId);
-
             if (clickedButton) {
                 clickedButton.classList.add("slot-selected");
-
-                // UPDATE FORM ACTION → CORRECT URL
                 document.getElementById("bookForm").action = "/book_slot/" + slotId;
-
-                // ENABLE BOOK BUTTON
                 document.getElementById("bookButton").disabled = false;
             }
         }
@@ -88,26 +100,26 @@
 </head>
 
 <body class="p-4">
-
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4" style="border-radius: 0.75rem;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4"
+        style="border-radius: 0.75rem;">
         <div class="container-fluid">
             <a class="navbar-brand" href="/patient">
-                <img src="{{ url_for('static', filename='logo2.png') }}" alt="Logo" style="height: 40px; border-radius: 50%;">
+                <img src="{{ url_for('static', filename='logo2.png') }}" alt="Logo"
+                    style="height: 40px; border-radius: 50%;">
                 <span class="fw-bold ms-2">MediCare</span>
             </a>
-
             <div class="collapse navbar-collapse" id="patientNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
                     <li class="nav-item d-none d-lg-block">
-                        <span class="navbar-text fw-bold me-3">Welcome, {{ this_user.username }}!</span>
+                        <span class="navbar-text fw-bold me-3">Welcome, {{ this_user.username if this_user else 'Guest'
+                            }}!</span>
                     </li>
                     <li class="nav-item"><a href="/edit_profile" class="nav-link">Edit Profile</a></li>
                     <li class="nav-item"><a href="/patient_history" class="nav-link">History</a></li>
                     <li class="nav-item">
-                        <a href="/login" class="btn btn-outline-danger ms-lg-2">
-                            Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
-                        </a>
+                        <a href="/login" class="btn btn-outline-danger ms-lg-2">Logout <i
+                                class="fa-solid fa-right-from-bracket ms-1"></i></a>
                     </li>
                 </ul>
             </div>
@@ -116,7 +128,6 @@
 
     <!-- MAIN -->
     <main class="container-fluid">
-
         <div class="d-flex align-items-center mb-4">
             <a href="/patient" class="btn btn-secondary me-3"><i class="fa-solid fa-arrow-left"></i> Back</a>
             <div>
@@ -126,85 +137,67 @@
         </div>
 
         <div class="card p-4 shadow-sm mt-3">
-
             <h4 class="mb-3 pb-3 border-bottom">Availability</h4>
 
-            {% if slots %}
-                {% for d in next_days %}
-                <div class="row align-items-center py-3 {% if not loop.last %}border-bottom{% endif %}">
+            {# Defensive: ensure slots_map exists so template doesn't crash #}
+            {% if not slots_map is defined %}
+            {% set slots_map = {} %}
+            {% endif %}
 
-                    <!-- DATE BOX -->
-                    <div class="col-md-3">
-                        <div class="date-box mx-auto mx-md-0">{{ d }}</div>
-                    </div>
-
-                    {% set morning = slots_map.get((d, 'morning')) %}
-                    {% set evening = slots_map.get((d, 'evening')) %}
-
-
-                    {% for s in slots %}
-                        {% if s.date == d and s.slot == "morning" %}
-                            {% set morning = s %}
-                        {% endif %}
-                        {% if s.date == d and s.slot == "evening" %}
-                            {% set evening = s %}
-                        {% endif %}
-                    {% endfor %}
-
-                    <!-- SLOTS SECTION -->
-                    <div class="col-md-9 d-flex flex-wrap gap-3 mt-3 mt-md-0">
-
-                        {% if morning %}
-                            <button id="slot-{{ morning.id }}"
-                                class="slot-btn btn
-                                {% if morning.is_available %}
-                                    slot-available
-                                {% else %}
-                                    slot-booked
-                                {% endif %}"
-                                onclick="selectSlot({{ morning.id }})"
-                                {% if not morning.is_available %}disabled{% endif %}>
-                                08:00 – 12:00 AM
-                            </button>
-                        {% else %}
-                            <button class="slot-btn btn btn-outline-secondary" disabled>No Morning Slot</button>
-                        {% endif %}
-
-                        {% if evening %}
-                            <button id="slot-{{ evening.id }}"
-                                class="slot-btn btn
-                                {% if evening.is_available %}
-                                    slot-available
-                                {% else %}
-                                    slot-booked
-                                {% endif %}"
-                                onclick="selectSlot({{ evening.id }})"
-                                {% if not evening.is_available %}disabled{% endif %}>
-                                04:00 – 09:00 PM
-                            </button>
-                        {% else %}
-                            <button class="slot-btn btn btn-outline-secondary" disabled>No Evening Slot</button>
-                        {% endif %}
-
-                    </div>
+            {# If there are no availability records at all, show message #}
+            {% if slots_map %}
+            {% for d in next_days %}
+            <div class="row align-items-center py-3 {% if not loop.last %}border-bottom{% endif %}">
+                <div class="col-md-3">
+                    <div class="date-box mx-auto mx-md-0">{{ d }}</div>
                 </div>
-                {% endfor %}
 
-                <!-- BOOKING BUTTON -->
-                <div class="text-end mt-4 pt-4 border-top">
-                    <form id="bookForm" method="GET">
-                        <button class="btn btn-success btn-lg" type="submit" id="bookButton" disabled>
-                            <i class="fa-solid fa-calendar-check me-2"></i> Book Selected Slot
-                        </button>
-                    </form>
+                {% set morning = slots_map.get((d, 'morning')) %}
+                {% set evening = slots_map.get((d, 'evening')) %}
+
+                <div class="col-md-9 d-flex flex-wrap gap-3 mt-3 mt-md-0">
+                    {% if morning %}
+                    <button id="slot-{{ morning.id }}"
+                        class="slot-btn btn {% if morning.is_available %}slot-available{% else %}slot-booked{% endif %}"
+                        onclick="selectSlot({{ morning.id }})" {% if not morning.is_available %}disabled{% endif %}>
+                        08:00 AM – 12:00 PM
+                    </button>
+                    {% else %}
+                    <button class="slot-btn slot-missing" disabled>
+                        08:00 AM – 12:00 PM
+                    </button>
+                    {% endif %}
+
+                    {% if evening %}
+                    <button id="slot-{{ evening.id }}"
+                        class="slot-btn btn {% if evening.is_available %}slot-available{% else %}slot-booked{% endif %}"
+                        onclick="selectSlot({{ evening.id }})" {% if not evening.is_available %}disabled{% endif %}>
+                        04:00 PM – 09:00 PM
+                    </button>
+                    {% else %}
+                    <button class="slot-btn slot-missing" disabled>
+                        04:00 PM – 09:00 PM
+                    </button>
+
+                    {% endif %}
                 </div>
+            </div>
+            {% endfor %}
+
+            <div class="text-end mt-4 pt-4 border-top">
+                <form id="bookForm" method="POST">
+                    <button class="btn btn-success btn-lg" type="submit" id="bookButton" disabled>
+                        <i class="fa-solid fa-calendar-check me-2"></i> Book Selected Slot
+                    </button>
+                </form>
+            </div>
 
             {% else %}
-                <div class="alert alert-info">No slots available for this doctor.</div>
+            <div class="alert alert-info">No slots available for this doctor.</div>
             {% endif %}
+
         </div>
-
     </main>
-
 </body>
+
 </html>

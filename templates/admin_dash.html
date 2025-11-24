@@ -19,14 +19,16 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa; /* Light grey background */
+            background-color: #f8f9fa;
+            /* Light grey background */
         }
 
         .card {
             border: none;
-            border-radius: 0.75rem; /* Thode rounded corners */
+            border-radius: 0.75rem;
+            /* Thode rounded corners */
         }
-        
+
         /* Buttons ke beech thodi spacing */
         .admin-buttons .btn {
             margin-left: 6px;
@@ -141,8 +143,8 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="mb-0 fw-bold">Welcome, {{this_user.username}}!</h4>
                 <form class="d-flex w-50" method="get" action="/admin">
-                    <input name="q" class="form-control me-2" type="text"
-                        placeholder="Search doctor/patient..." value="{{ q }}">
+                    <input name="q" class="form-control me-2" type="text" placeholder="Search doctor/patient..."
+                        value="{{ q }}">
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
             </div>
@@ -155,7 +157,8 @@
                 <div class="card shadow-sm p-4 mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                         <h4 class="mb-0"><i class="fa-solid fa-user-doctor me-2"></i> Registered Doctors</h4>
-                        <a href="/add_doctor" class="btn btn-success"><i class="fa-solid fa-plus me-1"></i>Create New</a>
+                        <a href="/add_doctor" class="btn btn-success"><i class="fa-solid fa-plus me-1"></i>Create
+                            New</a>
                     </div>
 
                     <ul class="list-group list-group-flush">
@@ -277,34 +280,34 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for a in upcoming %}
                                 <tr>
-                                    <th scope="row">1001.</th>
-                                    <td>Mr. Abcde</td>
-                                    <td>Dr. Pqrst</td>
-                                    <td>Cardiology</td>
-                                    <td><button class="btn btn-sm btn-info">View</button></td>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ a.patient.name }}</td>
+                                    <td>{{ a.doctor.doctor_name }}</td>
+                                    <td>{{ a.doctor.department.name }}</td>
+                                    <td>{{ a.date }}</td>
+                                    <td>
+                                        {% if a.time == "morning" %}
+                                        08:00 AM – 12:00 PM
+                                        {% else %}
+                                        04:00 PM – 09:00 PM
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/patient_history?id={{ a.patient_id }}"
+                                            class="btn btn-sm btn-primary">View</a>
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">1002.</th>
-                                    <td>Miss. Pqrst</td>
-                                    <td>Dr. Abcde</td>
-                                    <td>Neurology</td>
-                                    <td><button class="btn btn-sm btn-info">View</button></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1003.</th>
-                                    <td>Mr. Lmnop</td>
-                                    <td>Dr. Xyz</td>
-                                    <td>Orthopedic</td>
-                                    <td><button class="btn btn-sm btn-info">View</button></td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-        </div> </main>
+        </div>
+    </main>
 
 </body>
 
