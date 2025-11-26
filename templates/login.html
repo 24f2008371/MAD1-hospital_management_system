@@ -6,408 +6,262 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediCare - Login</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
     <style>
-        /*
-            MediCare - Main Stylesheet
-            This contains all styles for your application.
-        */
-
-        /* Sets the flawless, fixed gradient for the entire page */
-        html {
-            min-height: 100vh;
-            background-image: linear-gradient(45deg, #ff2a00 0%, #cc00ff 50%, #001aff 100%);
-            background-attachment: fixed;
-            background-size: cover;
-        }
-
-        /* =================================== */
-        /* 1. Global & Body Styles             */
-        /* =================================== */
-
-        /* Default body for login */
+        /* FULLSCREEN GRADIENT BACKGROUND */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: transparent;
+            font-family: "Inter", sans-serif;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
-            overflow: hidden;
+
+            background: linear-gradient(135deg, #ff3d00 0%, #d400ff 50%, #0038ff 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 10s ease infinite;
         }
 
-        /* Body style for multi-section pages */
-        body.landing-page {
-            display: block;
-            padding: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-color: transparent;
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        a {
-            text-decoration: none;
-        }
-
-        /* =================================== */
-        /* 2. Reusable Components              */
-        /* =================================== */
-
-        /* 2.1 Glassmorphism Card Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(25px);
+        /* CARD */
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 35px;
             border-radius: 1.5rem;
-            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(15px);
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+
+            animation: slideUp 0.7s ease-out;
             color: white;
-            z-index: 10;
         }
 
-        /* 2.2 Buttons (Primary & Secondary) */
-        .btn-login {
-            color: #4a00e0;
-            background: #fff;
-            border: none;
-            padding: 0.7rem 1.2rem;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .btn-login:hover,
-        .btn-login:focus {
-            color: #fff;
-            background: #4a00e0;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.3);
-        }
-
-        .btn-register {
-            display: block;
+        /* LOGO */
+        .logo-wrap {
             text-align: center;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(4px);
-            padding: 0.7rem 1.2rem;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 0.5rem;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
+            margin-bottom: 15px;
         }
 
-        .btn-register:hover,
-        .btn-register:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .logo-wrap img {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(5px);
         }
 
-        /* 2.3 Form Elements */
+        h2 {
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        /* INPUT FIELDS */
+        .input-group-custom {
+            position: relative;
+            margin-bottom: 1.4rem;
+        }
+
+        .input-group-custom i {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.75);
+            font-size: 1.1rem;
+        }
+
         .form-control-glass {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            padding-left: 45px !important;
+            padding-right: 15px;
+            height: 50px;
+
+            background: rgba(255, 255, 255, 0.2) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border-radius: 10px;
             color: white !important;
-            border-radius: 0.75rem !important;
-            padding-left: 3rem;
+            font-size: 1rem;
         }
 
         .form-control-glass::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255,255,255,0.7);
         }
 
         .form-control-glass:focus {
-            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.30) !important;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
         }
 
-        .input-group-text-custom {
-            position: absolute;
-            top: 50%;
-            left: 1rem;
-            transform: translateY(-50%);
-            background: transparent;
-            border: 0;
-            z-index: 10;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .form-label-admin {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        /* =================================== */
-        /* 3. Login Page Specifics             */
-        /* =================================== */
-
-        .card-header-custom {
-            border-bottom: 0;
-            padding-bottom: 0;
-            text-align: center;
-        }
-
-        .logo-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        /* NEW STYLES FOR ROLE TOGGLE */
-        .btn-group .btn-role {
-            /* This is the "inactive" glass style */
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            backdrop-filter: blur(4px);
-            transition: all 0.3s ease;
-            font-weight: 700;
-            padding: 0.6rem;
-        }
-
-        .btn-group .btn-role:hover:not(.btn-role-active) {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            color: #fff;
-        }
-
-        /* This is the "active" (selected) style */
-        .btn-group .btn-role-active {
-            color: #4a00e0;
-            background: #fff;
-            border: 1px solid #fff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Fixes Bootstrap's button group rounding */
-        .btn-group>.btn:first-child {
-            border-top-left-radius: 0.5rem;
-            border-bottom-left-radius: 0.5rem;
-        }
-
-        .btn-group>.btn:last-child {
-            border-top-right-radius: 0.5rem;
-            border-bottom-right-radius: 0.5rem;
-        }
-
-        /* Flash message inside login card */
-        .alert-glass {
+        /* BUTTONS */
+        .btn-login {
             width: 100%;
-            background: rgba(255, 80, 80, 0.25);
-            color: #fff;
+            padding: 14px;
+            border-radius: 10px;
+            background: white;
+            color: #5b00ff;
+            font-weight: 800;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
+            transition: 0.25s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-login:hover {
+            background: #5b00ff;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(91,0,255,0.45);
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border-radius: 10px;
+
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(6px);
+
+            color: white;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .btn-register:hover {
+            background: rgba(255,255,255,0.35);
+            transform: translateY(-3px);
+        }
+
+        /* FLASH MESSAGE */
+        .alert-glass {
             padding: 12px 18px;
-            margin-bottom: 18px;
             border-radius: 12px;
-            backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: white;
             font-weight: 500;
-            position: relative;
+            backdrop-filter: blur(15px);
+            margin-bottom: 15px;
             animation: fadeIn 0.4s ease-out;
         }
 
         .alert-glass.success {
-            background: rgba(0, 255, 100, 0.25);
-            border-color: rgba(0, 255, 100, 0.5);
+            background: rgba(0, 255, 120, 0.22);
+            border: 1px solid rgba(0, 255, 120, 0.4);
         }
 
         .alert-glass.danger {
-            background: rgba(255, 0, 0, 0.25);
-            border-color: rgba(255, 0, 0, 0.6);
+            background: rgba(255, 60, 60, 0.25);
+            border: 1px solid rgba(255, 60, 60, 0.45);
         }
 
         .alert-glass .close-btn {
-            position: absolute;
-            right: 15px;
-            top: 8px;
             background: none;
             border: none;
-            font-size: 20px;
-            font-weight: bold;
             color: white;
-            cursor: pointer;
+            float: right;
+            font-size: 18px;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Auto hide animation */
         .fade-out {
-            animation: fadeOut 0.8s ease-out forwards;
+            animation: fadeOut 0.6s ease-out forwards;
         }
 
         @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            to {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
+            to { opacity: 0; transform: translateY(-10px); }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-4">
-                <div class="card glass-card p-4 p-md-4">
-                    <div class="card-header-custom">
-                        <div class="logo-icon">
-                            <img src="../static/logo2.png" class="img-fluid" style="border-radius: 50%; height: 70px;"
-                                alt="Healthcare Icon">
-                        </div>
-                        <h2 class="fw-bold mb-1">Welcome Back!</h2>
-                        <p class="text-white-60">Please enter your credentials to login.</p>
-                    </div>
-                    <div class="card-body">
+    <div class="login-card">
 
-                        <!-- Flash Messages Inside Login Card -->
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                        {% for category, message in messages %}
-                        <div class="alert-glass {{ category }}">
-                            {{ message }}
-                            <button class="close-btn" onclick="this.parentElement.remove()">×</button>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                        {% endwith %}
-
-                        <form action="/login" method="post">
-
-                            <!-- Username -->
-                            <div class="mb-4 position-relative">
-                                <label for="username" class="form-label visually-hidden">Username</label>
-                                <span class="input-group-text-custom">
-                                    <i class="fas fa-user"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-lg form-control-glass" id="username"
-                                    placeholder="Username" required name="username">
-                            </div>
-
-                            <!-- Password -->
-                            <div class="mb-4 position-relative">
-                                <label for="password" class="form-label visually-hidden">Password</label>
-                                <span class="input-group-text-custom">
-                                    <i class="fa-solid fa-lock"></i>
-                                </span>
-                                <input type="password" class="form-control form-control-lg form-control-glass"
-                                    id="password" placeholder="••••••••" required name="password">
-                            </div>
-
-                            <!-- <div class="mb-4">
-                                <label class="form-label-admin">Login as:</label>
-                                <div class="btn-group w-100" role="group">
-                                    <button type="button" class="btn btn-role btn-role-active" data-type="patient">
-                                        <i class="fa-solid fa-user-injured me-1"></i> Patient
-                                    </button>
-                                    <button type="button" class="btn btn-role" data-type="doctor">
-                                        <i class="fa-solid fa-user-doctor me-1"></i> Doctor
-                                    </button>
-                                    <button type="button" class="btn btn-role" data-type="admin">
-                                        <i class="fa-solid fa-user-shield me-1"></i> Admin
-                                    </button>
-                                </div>
-                            </div> -->
-
-                            <!-- Hidden input to store the selected role -->
-                            <input type="hidden" id="userType" name="type" value="patient">
-
-                            <!-- Submit Button -->
-                            <div class="d-grid mt-4" style="display: flex;">
-                                <button type="submit" class="btn btn-login">Login</button>
-                            </div>
-                            <div class="d-grid mt-3">
-
-                                <a href="/register" class="btn btn-register">Create New Account</a>
-
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <!-- LOGO -->
+        <div class="logo-wrap">
+            <a href="/"><img src="../static/logo2.png"></a>
         </div>
+
+        <h2>Welcome Back!</h2>
+        <p class="subtitle">Login to continue</p>
+
+        <!-- FLASH -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-glass {{ category }}">
+                    {{ message }}
+                    <button class="close-btn" onclick="this.parentElement.remove()">×</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- LOGIN FORM -->
+        <form action="/login" method="post">
+
+            <div class="input-group-custom">
+                <i class="fas fa-user"></i>
+                <input type="text" class="form-control form-control-glass" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group-custom">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" class="form-control form-control-glass" name="password" placeholder="Password" required>
+            </div>
+
+            <input type="hidden" id="userType" name="type" value="patient">
+
+            <button type="submit" class="btn-login mt-2">Login</button>
+
+            <a href="/register" class="btn btn-register mt-3">Create New Account</a>
+
+        </form>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Simple JS to handle the button toggle -->
+    <!-- Auto-hide alerts -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const roleButtons = document.querySelectorAll('.btn-role');
-            const userTypeInput = document.getElementById('userType');
-
-            roleButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    // 1. Remove active class from all buttons
-                    roleButtons.forEach(btn => {
-                        btn.classList.remove('btn-role-active');
-                    });
-
-                    // 2. Add active class to the clicked button
-                    this.classList.add('btn-role-active');
-
-                    // 3. Update the hidden input value
-                    const selectedType = this.getAttribute('data-type');
-                    userTypeInput.value = selectedType;
-                });
-            });
-        });
-    </script>
-
-    <script>
-        // Auto hide flash messages after 3 seconds
         document.addEventListener("DOMContentLoaded", () => {
-            const alerts = document.querySelectorAll('.alert-glass');
-
-            alerts.forEach(alert => {
+            const alerts = document.querySelectorAll(".alert-glass");
+            alerts.forEach(a => {
                 setTimeout(() => {
-                    alert.classList.add('fade-out');
-                    setTimeout(() => alert.remove(), 800); // Remove after animation
-                }, 3000);
+                    a.classList.add("fade-out");
+                    setTimeout(() => a.remove(), 600);
+                }, 2500);
             });
         });
     </script>

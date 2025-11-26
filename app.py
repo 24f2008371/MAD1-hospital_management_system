@@ -28,7 +28,19 @@ if __name__ == "__main__":
     #         db.session.add(user1)
     #         db.session.commit()
     #         print("Database created and admin user added!")
+
+
+    # with app.app_context():
+    #     if Department.query.count() == 0:   # Only if table is empty
+    #         db.session.add(Department(name="Cardiology", description="Heart treatments"))
+    #         db.session.add(Department(name="Neurology", description="Brain & nerves"))
+    #         db.session.add(Department(name="Oncology", description="Cancer treatment"))
+    #         db.session.add(Department(name="General", description="General checkups"))
+    #         db.session.commit()
+    #         print("Default departments created!")
+
     app.run() 
+
 
 
 

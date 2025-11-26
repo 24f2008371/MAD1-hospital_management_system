@@ -7,306 +7,271 @@
     <title>MediCare - Admin Dashboard</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8f9fa;
-            /* Light grey background */
         }
 
+        /* Full-width cards */
         .card {
             border: none;
             border-radius: 0.75rem;
-            /* Thode rounded corners */
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+            width: 100% !important;
+            /* FULL WIDTH MATCHING NAVBAR */
         }
 
-        /* Buttons ke beech thodi spacing */
+        main.container {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .list-group-item {
+            border: none !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .list-group-item+.list-group-item {
+            border-top: 1px solid #eee !important;
+        }
+
         .admin-buttons .btn {
             margin-left: 6px;
+        }
+
+        .table thead {
+            background: #f1f3f5;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: #333;
+        }
+
+        @media (min-width: 992px) {
+
+            .container,
+            .container-lg,
+            .container-md,
+            .container-sm {
+                max-width: 1026px;
+            }
         }
     </style>
 </head>
 
 <body class="p-4">
 
-    <div class="modal fade" id="editPatientModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Patient</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <form id="editPatientForm" method="post">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" id="editName" name="name" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Age</label>
-                            <input type="number" id="editAge" name="age" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Gender</label>
-                            <select id="editGender" name="gender" class="form-control">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phone</label>
-                            <input type="text" id="editPhone" name="phone" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" id="editEmail" name="email" class="form-control">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function openEditModal(id, name, age, gender, phone, email) {
-            document.getElementById("editName").value = name;
-            document.getElementById("editAge").value = age;
-            document.getElementById("editGender").value = gender;
-            document.getElementById("editPhone").value = phone;
-            document.getElementById("editEmail").value = email;
-            document.getElementById("editPatientForm").action = "/edit_patient/" + id;
-            var modal = new bootstrap.Modal(document.getElementById("editPatientModal"));
-            modal.show();
-        }
-    </script>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="container mt-3">
-        {% for category, message in messages %}
-        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show shadow-sm"
-            role="alert" style="border-radius: 10px; font-weight: 500; font-size: 1rem;">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4"
-        style="border-radius: 0.75rem;">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4" style="border-radius: 0.75rem;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
-                <span class="fw-bold ms-2">MediCare Admin</span>
+            <a class="navbar-brand fw-bold" href="/">
+                <img src="../static/logo2.png" style="height: 40px; border-radius: 50%;">
+                MediCare Admin
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="adminNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/login" class="btn btn-outline-danger ms-lg-2">Logout <i
-                                class="fa-solid fa-right-from-bracket ms-1"></i></a>
+                        <a href="/logout" class="btn btn-outline-danger">Logout</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="container-fluid">
+    <!-- FLASH MESSAGES -->
+    <div class="container-fluid px-4 mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
 
-        <h2 class="mb-4">Admin Dashboard</h2>
 
-        <div class="card shadow-sm p-3 mb-4">
+    <!-- MAIN CONTAINER (CENTERED) -->
+    <main class="container-fluid px-4">
+
+        <!-- Welcome -->
+        <div class="card p-3 mb-4">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 fw-bold">Welcome, {{this_user.username}}!</h4>
-                <form class="d-flex w-50" method="get" action="/admin">
-                    <input name="q" class="form-control me-2" type="text" placeholder="Search doctor/patient..."
-                        value="{{ q }}">
+                <h4 class="fw-bold mb-0">Welcome, {{this_user.username}}!</h4>
+                <form class="d-flex align-items-center gap-2" method="get" action="/admin"
+                    style="max-width: 450px; width: 100%;">
+
+                    <div class="position-relative w-100">
+                        <input name="q" id="searchInput" class="form-control" type="text"
+                            placeholder="Search doctor/patient..." value="{{ q }}" style="padding-right: 35px;">
+
+                        {% if q %}
+                        <a href="/admin" class="position-absolute"
+                            style="right: 10px; top: 50%; transform: translateY(-50%); color: #aaa; font-size: 18px; text-decoration:none;">
+                            &times;
+                        </a>
+                        {% endif %}
+                    </div>
+
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
+
             </div>
         </div>
 
-        <div class="row">
-
-            <div class="col-lg-7">
-
-                <div class="card shadow-sm p-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
-                        <h4 class="mb-0"><i class="fa-solid fa-user-doctor me-2"></i> Registered Doctors</h4>
-                        <a href="/add_doctor" class="btn btn-success"><i class="fa-solid fa-plus me-1"></i>Create
-                            New</a>
-                    </div>
-
-                    <ul class="list-group list-group-flush">
-                        {% if doctors %}
-                        {% for d in doctors %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <div>
-                                <strong>{{ d.doctor_name }}</strong>
-                                <br>
-                                <small class="text-muted">{{ d.email }}</small>
-                            </div>
-                            <div class="admin-buttons">
-                                <a href="/edit_doctor/{{ d.id }}" class="btn btn-sm btn-warning">edit</a>
-                                <a href="/delete_doctor/{{ d.id }}" class="btn btn-sm btn-danger">delete</a>
-                                <a href="/blacklist_doctor/{{ d.id }}" class="btn btn-sm btn-dark">blacklist</a>
-                            </div>
-                        </li>
-                        {% endfor %}
-                        {% else %}
-                        <li class="list-group-item px-0 text-muted">No doctors found.</li>
-                        {% endif %}
-                    </ul>
-                </div>
-
-                <div class="card shadow-sm p-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
-                        <h4 class="mb-0"><i class="fa-solid fa-user-injured me-2"></i> Registered Patients</h4>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% if patients %}
-                        {% for p in patients %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <div>
-                                <strong>{{ p.name }}</strong>
-                                <br>
-                                <small class="text-muted">{{ p.email }}</small>
-                            </div>
-                            <div class="admin-buttons">
-                                <a href="/edit_patient/{{ p.id }}" class="btn btn-sm btn-warning">edit</a>
-                                <a href="/delete_patient/{{ p.id }}" class="btn btn-sm btn-danger">delete</a>
-                                <a href="/blacklist_patient/{{ p.id }}" class="btn btn-sm btn-dark">blacklist</a>
-                            </div>
-                        </li>
-                        {% endfor %}
-                        {% else %}
-                        <li class="list-group-item px-0 text-muted">No Patients found.</li>
-                        {% endif %}
-                    </ul>
-                </div>
-
-                <div class="card shadow-sm p-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
-                        <h4 class="mb-0"><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Patients</h4>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% if blacklisted_patients %}
-                        {% for p in blacklisted_patients %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <div>
-                                <strong>{{ p.name }}</strong>
-                                <br>
-                                <small class="text-muted">{{ p.email }}</small>
-                            </div>
-                            <div class="admin-buttons">
-                                <a href="/unblacklist_patient/{{ p.id }}" class="btn btn-sm btn-success">
-                                    unblacklist
-                                </a>
-                            </div>
-                        </li>
-                        {% endfor %}
-                        {% else %}
-                        <li class="list-group-item px-0 text-muted">No Blacklisted Patients.</li>
-                        {% endif %}
-                    </ul>
-                </div>
-
-                <div class="card shadow-sm p-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
-                        <h4 classm="mb-0"><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Doctors</h4>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% if blacklisted_doctors %}
-                        {% for d in blacklisted_doctors %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <div>
-                                <strong>{{ d.doctor_name }}</strong>
-                                <br>
-                                <small class="text-muted">{{ d.email }}</small>
-                            </div>
-                            <div class="admin-buttons">
-                                <a href="/unblacklist_doctor/{{ d.id }}" class="btn btn-sm btn-success">
-                                    unblacklist
-                                </a>
-                            </div>
-                        </li>
-                        {% endfor %}
-                        {% else %}
-                        <li class="list-group-item px-0 text-muted">No Blacklisted Doctors.</li>
-                        {% endif %}
-                    </ul>
-                </div>
+        <!-- Registered Doctors -->
+        <div class="card p-4 mb-4">
+            <div class="section-header">
+                <h4><i class="fa-solid fa-user-doctor me-2"></i> Registered Doctors</h4>
+                <a href="/add_doctor" class="btn btn-success"><i class="fa-solid fa-plus me-1"></i> Create New</a>
             </div>
 
-            <div class="col-lg-5">
-                <div class="card shadow-sm p-4 mb-4">
-                    <div class="mb-3 pb-3 border-bottom">
-                        <h4 class="mb-0"><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h4>
+            <ul class="list-group list-group-flush mt-3">
+                {% for d in doctors %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ d.doctor_name }}</strong><br>
+                        <small class="text-muted">{{ d.email }}</small>
                     </div>
+                    <div class="admin-buttons">
+                        <a href="/edit_doctor/{{ d.id }}" class="btn btn-warning btn-sm">edit</a>
+                        <a href="/delete_doctor/{{ d.id }}" class="btn btn-danger btn-sm">delete</a>
+                        <a href="/blacklist_doctor/{{ d.id }}" class="btn btn-dark btn-sm">blacklist</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">Patient</th>
-                                    <th scope="col">Doctor</th>
-                                    <th scope="col">Dept</th>
-                                    <th scope="col">History</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for a in upcoming %}
-                                <tr>
-                                    <td>{{ loop.index }}</td>
-                                    <td>{{ a.patient.name }}</td>
-                                    <td>{{ a.doctor.doctor_name }}</td>
-                                    <td>{{ a.doctor.department.name }}</td>
-                                    <td>{{ a.date }}</td>
-                                    <td>
-                                        {% if a.time == "morning" %}
-                                        08:00 AM – 12:00 PM
-                                        {% else %}
-                                        04:00 PM – 09:00 PM
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <a href="/patient_history?id={{ a.patient_id }}"
-                                            class="btn btn-sm btn-primary">View</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+        <!-- Registered Patients -->
+        <div class="card p-4 mb-4">
+            <div class="section-header">
+                <h4><i class="fa-solid fa-user-injured me-2"></i> Registered Patients</h4>
+            </div>
+
+            <ul class="list-group list-group-flush mt-3">
+                {% for p in patients %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ p.name }}</strong><br>
+                        <small class="text-muted">{{ p.email }}</small>
                     </div>
-                </div>
+                    <div class="admin-buttons">
+                        <a href="/edit_patient/{{ p.id }}" class="btn btn-warning btn-sm">edit</a>
+                        <a href="/delete_patient/{{ p.id }}" class="btn btn-danger btn-sm">delete</a>
+                        <a href="/blacklist_patient/{{ p.id }}" class="btn btn-dark btn-sm">blacklist</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Blacklisted Patients -->
+        <div class="card p-4 mb-4">
+            <div class="section-header">
+                <h4><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Patients</h4>
+            </div>
+
+            <ul class="list-group list-group-flush mt-3">
+                {% for p in blacklisted_patients %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ p.name }}</strong><br>
+                        <small class="text-muted">{{ p.email }}</small>
+                    </div>
+                    <a href="/unblacklist_patient/{{ p.id }}" class="btn btn-success btn-sm">unblacklist</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Blacklisted Doctors -->
+        <div class="card p-4 mb-4">
+            <div class="section-header">
+                <h4><i class="fa-solid fa-user-slash me-2"></i> Blacklisted Doctors</h4>
+            </div>
+
+            <ul class="list-group list-group-flush mt-3">
+                {% for d in blacklisted_doctors %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ d.doctor_name }}</strong><br>
+                        <small class="text-muted">{{ d.email }}</small>
+                    </div>
+                    <a href="/unblacklist_doctor/{{ d.id }}" class="btn btn-success btn-sm">unblacklist</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Upcoming Appointments -->
+        <div class="card p-4 mb-4">
+            <div class="section-header">
+                <h4><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h4>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Dept</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in upcoming %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ a.patient.name }}</td>
+                            <td>{{ a.doctor.doctor_name }}</td>
+                            <td>{{ a.doctor.department.name }}</td>
+                            <td>{{ a.date }}</td>
+
+                            <td>
+                                {% if a.time == "morning" %}
+                                08:00 AM – 12:00 PM
+                                {% else %}
+                                04:00 PM – 09:00 PM
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <a href="/patient_history?id={{ a.patient_id }}" class="btn btn-primary btn-sm">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
         </div>
+
     </main>
 
 </body>

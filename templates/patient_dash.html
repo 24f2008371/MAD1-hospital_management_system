@@ -7,11 +7,11 @@
     <title>MediCare - Patient Dashboard</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -19,29 +19,32 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa; /* Light grey background */
+            background-color: #f8f9fa;
+            /* Light grey background */
         }
 
         .card {
             border: none;
-            border-radius: 0.75rem; /* Thode rounded corners */
+            border-radius: 0.75rem;
+            /* Thode rounded corners */
         }
     </style>
 </head>
 
 <body class="p-4">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4" style="border-radius: 0.75rem;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4"
+        style="border-radius: 0.75rem;">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img src="../static/logo2.png" alt="Logo" style="height: 40px; border-radius: 50%;">
                 <span class="fw-bold ms-2">MediCare Patient</span>
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#patientNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="patientNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
                     <li class="nav-item d-none d-lg-block">
@@ -56,7 +59,7 @@
                         <a href="/patient_history" class="nav-link">History</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/login" class="btn btn-outline-danger ms-lg-2">
+                        <a href="/logout" class="btn btn-outline-danger ms-lg-2">
                             Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
                         </a>
                     </li>
@@ -77,7 +80,7 @@
                     <div class="mb-3 pb-3 border-bottom">
                         <h4 class="mb-0"><i class="fa-solid fa-hospital-user me-2"></i> Departments</h4>
                     </div>
-                    
+
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <strong>Cardiology</strong>
@@ -91,7 +94,7 @@
                             <strong>General</strong>
                             <a href="department/General" class="btn btn-sm btn-primary">View Details</a>
                         </li>
-                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <strong>Neurology</strong>
                             <a href="department/Neurology" class="btn btn-sm btn-primary">View Details</a>
                         </li>
@@ -104,7 +107,7 @@
                     <div class="mb-3 pb-3 border-bottom">
                         <h4 class="mb-0"><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h4>
                     </div>
-                    
+
                     <div class="table-responsive">
                         <table class="table table-striped mb-0">
                             <thead>
@@ -118,21 +121,42 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% if appointments %}
+                                {% for a in appointments %}
                                 <tr>
-                                    <th scope="row">1001.</th>
-                                    <td>Dr. Abcde</td>
-                                    <td>General</td>
-                                    <td>24/09/2025</td>
-                                    <td>08 AM - 12 PM</td>
-                                    <td><button class="btn btn-sm btn-danger">Cancel</button></td>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ a.doctor.doctor_name }}</td>
+                                    <td>{{ a.doctor.department.name }}</td>
+                                    <td>{{ a.date }}</td>
+                                    <td>
+                                        {% if a.time == "morning" %}
+                                        08 AM – 12 PM
+                                        {% else %}
+                                        04 PM – 09 PM
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/cancel_appointment/{{ a.id }}" class="btn btn-danger btn-sm">
+                                            Cancel
+                                        </a>
+                                    </td>
                                 </tr>
-                                </tbody>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No upcoming appointments.</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+
                         </table>
                     </div>
                 </div>
             </div>
 
-        </div> </main>
+        </div>
+    </main>
 
 </body>
+
 </html>

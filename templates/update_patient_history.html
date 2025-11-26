@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Record Visit</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light grey background */
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.75rem; /* Thode rounded corners */
+        }
+
+        /* Form Labels ko thoda style diya */
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+    </style>
+</head>
+
+<body class="p-4">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4" style="border-radius: 0.75rem;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/doctor">
+                <img src="{{ url_for('static', filename='logo2.png') }}" alt="Logo" style="height: 40px; border-radius: 50%;">
+                <span class="fw-bold ms-2">MediCare Doctor</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="adminNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/doctor">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/login" class="btn btn-outline-danger ms-lg-2">Logout <i class="fa-solid fa-right-from-bracket ms-1"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <div class="d-flex align-items-center mb-4">
+            <a href="javascript:history.back()" class="btn btn-secondary me-3">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+            <h2 class="mb-0 fw-bold">Record Medical Visit</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="card shadow-sm p-4 p-md-5">
+                    
+                    <form method="POST">
+                        
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="fa-solid fa-tag me-2 text-primary"></i> Visit Type / Reason
+                            </label>
+                            <input type="text" name="visit_type" class="form-control form-control-lg" 
+                                   placeholder="e.g. Routine Checkup, Fever, Consultation" required>
+                        </div>
+
+                        <div class="row g-4">
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-stethoscope me-2 text-primary"></i> Diagnosis
+                                </label>
+                                <textarea name="diagnosis" class="form-control" rows="3" 
+                                          placeholder="Doctor's observations..."></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-flask me-2 text-primary"></i> Tests Done
+                                </label>
+                                <textarea name="tests" class="form-control" rows="3" 
+                                          placeholder="List tests conducted (if any)..."></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-file-prescription me-2 text-primary"></i> Prescription Note
+                                </label>
+                                <textarea name="prescription" class="form-control" rows="3" 
+                                          placeholder="Advice or notes..."></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fa-solid fa-pills me-2 text-primary"></i> Medicines
+                                </label>
+                                <textarea name="medicines" class="form-control" rows="3" 
+                                          placeholder="e.g. Paracetamol 500mg (Morning, Night)"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-5 pt-3 border-top">
+                            <a href="javascript:history.back()" class="btn btn-light me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fa-solid fa-save me-2"></i> Save Record
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

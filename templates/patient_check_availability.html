@@ -118,7 +118,7 @@
                     <li class="nav-item"><a href="/edit_profile" class="nav-link">Edit Profile</a></li>
                     <li class="nav-item"><a href="/patient_history" class="nav-link">History</a></li>
                     <li class="nav-item">
-                        <a href="/login" class="btn btn-outline-danger ms-lg-2">Logout <i
+                        <a href="/logout" class="btn btn-outline-danger ms-lg-2">Logout <i
                                 class="fa-solid fa-right-from-bracket ms-1"></i></a>
                     </li>
                 </ul>
@@ -152,14 +152,29 @@
                     <div class="date-box mx-auto mx-md-0">{{ d }}</div>
                 </div>
 
-                {% set morning = slots_map.get((d, 'morning')) %}
-                {% set evening = slots_map.get((d, 'evening')) %}
+                {# Error-proof version: check keys manually #}
+                {% set m_key = d ~ '|morning' %}
+                {% set e_key = d ~ '|evening' %}
+
+                {% if m_key in slots_map %}
+                {% set morning = slots_map[m_key] %}
+                {% else %}
+                {% set morning = None %}
+                {% endif %}
+
+                {% if e_key in slots_map %}
+                {% set evening = slots_map[e_key] %}
+                {% else %}
+                {% set evening = None %}
+                {% endif %}
 
                 <div class="col-md-9 d-flex flex-wrap gap-3 mt-3 mt-md-0">
+
+                    {# MORNING SLOT #}
                     {% if morning %}
                     <button id="slot-{{ morning.id }}"
                         class="slot-btn btn {% if morning.is_available %}slot-available{% else %}slot-booked{% endif %}"
-                        onclick="selectSlot({{ morning.id }})" {% if not morning.is_available %}disabled{% endif %}>
+                        onclick="selectSlot('{{ morning.id }}')" {% if not morning.is_available %}disabled{% endif %}>
                         08:00 AM – 12:00 PM
                     </button>
                     {% else %}
@@ -168,21 +183,26 @@
                     </button>
                     {% endif %}
 
+
+
+                    {# EVENING SLOT #}
                     {% if evening %}
                     <button id="slot-{{ evening.id }}"
                         class="slot-btn btn {% if evening.is_available %}slot-available{% else %}slot-booked{% endif %}"
-                        onclick="selectSlot({{ evening.id }})" {% if not evening.is_available %}disabled{% endif %}>
+                        onclick="selectSlot('{{ evening.id }}')" {% if not evening.is_available %}disabled{% endif %}>
                         04:00 PM – 09:00 PM
                     </button>
                     {% else %}
                     <button class="slot-btn slot-missing" disabled>
                         04:00 PM – 09:00 PM
                     </button>
-
                     {% endif %}
+
                 </div>
             </div>
             {% endfor %}
+
+
 
             <div class="text-end mt-4 pt-4 border-top">
                 <form id="bookForm" method="POST">

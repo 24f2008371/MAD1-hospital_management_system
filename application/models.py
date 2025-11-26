@@ -50,6 +50,8 @@ class Appointment(db.Model):
     doctor_id = db.Column(db.Integer(), db.ForeignKey('doctor.id', ondelete="CASCADE"), nullable=False)
     date = db.Column(db.String(), nullable=False)
     time = db.Column(db.String(), nullable=False)
+    visit_type = db.Column(db.String(), default="In-person", nullable=False)
+
     
 class Treatment(db.Model):
     __tablename__ = 'treatment'
@@ -58,7 +60,16 @@ class Treatment(db.Model):
     doctor_id = db.Column(db.Integer(), db.ForeignKey('doctor.id', ondelete="CASCADE"), nullable=False)
     date = db.Column(db.String(), nullable=False)
     time = db.Column(db.String(), nullable=False)
-    appointment = db.relationship('Appointment', backref='treatment')
+
+    visit_type = db.Column(db.String(), nullable=False)
+    tests_done = db.Column(db.String(), nullable = True)
+    diagnosis = db.Column(db.String(), nullable = True)
+    prescription = db.Column(db.String(), nullable = True)
+    medicines = db.Column(db.String(), nullable = True)
+
+    appointment = db.relationship('Appointment', backref=db.backref('treatment', uselist=False))
+    doctor = db.relationship('Doctor', backref='treatments')
+
 
 class Enquiry(db.Model):
     __tablename__ = 'enquiry'
