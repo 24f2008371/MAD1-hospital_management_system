@@ -315,7 +315,7 @@ def edit_patient(id):
         flash("Patient updated successfully!", "success")
         return redirect("/admin")
 
-    return render_template("edit_patient.html", patient=patient)
+    return render_template("edit_patient.html", patient=patient, this_user=current_user())
 
 
 @app.route("/blacklist_patient/<int:id>")
@@ -365,13 +365,26 @@ def edit_doctor(id):
 
 
 
-@app.route("/delete_doctor/<int:id>")
-def delete_doctor(id):
-    doctor = Doctor.query.get_or_404(id)
+@app.route('/delete_doctor/<int:doctor_id>')
+def delete_doctor(doctor_id):
+    doctor = Doctor.query.get_or_404(doctor_id)
+
+    # Check if doctor has any appointments
+    if doctor.appointment and len(doctor.appointment) > 0:
+        flash("Cannot delete doctor. They still have appointments assigned.", "danger")
+        return redirect('/admin')
+
+    # Delete user account linked to doctor
+    user = User.query.get(doctor.user_id)
+
     db.session.delete(doctor)
+    db.session.delete(user)
     db.session.commit()
-    flash("Doctor deleted!", "danger")
-    return redirect("/admin")
+
+    flash("Doctor deleted successfully!", "success")
+    return redirect('/admin')
+
+
 
 
 @app.route("/blacklist_doctor/<int:id>")
@@ -465,7 +478,7 @@ def add_doctor():
         password = request.form.get("password")
 
         if not username.lower().startswith("dr."):
-            username = f"Dr. {username}"
+            username = f"{username}"
 
         if Doctor.query.filter_by(doctor_name=username).first():
             flash("Doctor already exists!", "danger")
