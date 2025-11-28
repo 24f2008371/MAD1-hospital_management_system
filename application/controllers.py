@@ -178,7 +178,7 @@ def admin_dash():
         blacklisted_doctors = Doctor.query.join(User).filter(User.blocked == True).all()
         patients = Patient.query.filter_by(blocked=False).all()
         blacklisted_patients = Patient.query.filter_by(blocked=True).all()
-        upcoming = Appointment.query.join(Patient).join(Doctor).all()
+        upcoming = Appointment.query.join(Patient).join(Doctor).filter(Appointment.status == "Upcoming").all()
 
     else:
         like = f"%{q}%"
@@ -199,8 +199,10 @@ def admin_dash():
         ).all()
 
         upcoming = Appointment.query.join(Patient).join(Doctor).filter(
+            Appointment.status == "Upcoming",
             or_(Patient.name.ilike(like), Doctor.doctor_name.ilike(like), Doctor.email.ilike(like))
         ).all()
+
 
     this_user = User.query.filter_by(type="admin").first()
 
@@ -478,7 +480,7 @@ def add_doctor():
         password = request.form.get("password")
 
         if not username.lower().startswith("dr."):
-            username = f"{username}"
+            username = f"Dr. {username}"
 
         if Doctor.query.filter_by(doctor_name=username).first():
             flash("Doctor already exists!", "danger")
