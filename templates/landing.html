@@ -19,6 +19,30 @@
 
 <body class="landing-page">
 
+    <!-- Flash Message (Floating Top Center) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash-msg flash-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Auto-hide flash message after 2 sec
+        setTimeout(() => {
+            document.querySelectorAll('.flash-msg').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(-20px)';
+            });
+        }, 2000);
+    </script>
+    {% endif %}
+    {% endwith %}
+
+
     <nav class="navbar navbar-expand-lg glass-card navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">
@@ -180,23 +204,23 @@
 
                                         <!-- Slide 2: Doctor + Nurse Pixar style -->
                                         <div class="carousel-item">
-                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/7po/x8p/ath/ec911d00-7e51-4c59-9bec-00636c154adc.png" class="d-block w-100 img-fluid"
-                                                alt="Doctor and Nurse Pixar Style">
+                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/7po/x8p/ath/ec911d00-7e51-4c59-9bec-00636c154adc.png"
+                                                class="d-block w-100 img-fluid" alt="Doctor and Nurse Pixar Style">
                                         </div>
 
                                         <div class="carousel-item">
-                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/khq/3gt/e8c/Generated%20Image%20November%2013%2C%202025%20-%207_53PM.png" class="d-block w-100 img-fluid"
-                                                alt="Doctor and Nurse Pixar Style">
+                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/khq/3gt/e8c/Generated%20Image%20November%2013%2C%202025%20-%207_53PM.png"
+                                                class="d-block w-100 img-fluid" alt="Doctor and Nurse Pixar Style">
                                         </div>
 
                                         <div class="carousel-item">
-                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/hzj/n6q/tlw/Generated%20Image%20November%2013%2C%202025%20-%207_51PM.png" class="d-block w-100 img-fluid"
-                                                alt="Doctor and Nurse Pixar Style">
+                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/hzj/n6q/tlw/Generated%20Image%20November%2013%2C%202025%20-%207_51PM.png"
+                                                class="d-block w-100 img-fluid" alt="Doctor and Nurse Pixar Style">
                                         </div>
 
                                         <div class="carousel-item">
-                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/sw4/yv8/sec/Generated%20Image%20November%2013%2C%202025%20-%207_51PM%20%281%29.png" class="d-block w-100 img-fluid"
-                                                alt="Doctor and Nurse Pixar Style">
+                                            <img src="https://5f5cb648d6.imgdist.com/pub/bfra/1maab7co/sw4/yv8/sec/Generated%20Image%20November%2013%2C%202025%20-%207_51PM%20%281%29.png"
+                                                class="d-block w-100 img-fluid" alt="Doctor and Nurse Pixar Style">
                                         </div>
 
                                     </div>

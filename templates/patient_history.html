@@ -76,18 +76,18 @@
                 <a href="/admin" class="btn btn-secondary me-3">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
+                {% elif this_user.type == "patient" %}
+                <a href="/patient" class="btn btn-secondary me-3">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </a>
                 {% else %}
-                <a href="/patient" class="btn btn-secondary">
+                <a href="/doctor" class="btn btn-secondary me-3">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
                 {% endif %}
 
                 <h2 class="mb-0 fw-bold">Patient History</h2>
             </div>
-
-            <a href="/record_visit?id={{patient.id}}" class="btn btn-success">
-                <i class="fa-solid fa-plus me-2"></i> Record New Visit
-            </a>
         </div>
 
         <div class="card shadow-sm p-4 mb-4">
@@ -150,23 +150,11 @@
                         {% for t in treatments %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td class="fw-bold text-primary">Dr. {{ t.appointment.doctor.doctor_name }}</td>
-                            <td>
-                                <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill px-3">
-                                    {{ t.appointment.doctor.department.name }}
-                                </span>
-                            </td>
-                            <td>{{ t.date }}</td>
-                            <td>
-                                {% if t.time == "morning" %}
-                                <i class="fa-regular fa-sun me-1 text-warning"></i> Morning
-                                {% else %}
-                                <i class="fa-solid fa-moon me-1 text-secondary"></i> Evening
-                                {% endif %}
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-secondary">View Report</button>
-                            </td>
+                            <td>{{ t.visit_type }}</td>
+                            <td>{{ t.tests_done or "-" }}</td>
+                            <td>{{ t.diagnosis or "-" }}</td>
+                            <td>{{ t.prescription or "-" }}</td>
+                            <td>{{ t.medicines or "-" }}</td>
                         </tr>
                         {% endfor %}
                         {% else %}
@@ -178,6 +166,7 @@
                         </tr>
                         {% endif %}
                     </tbody>
+
                 </table>
             </div>
         </div>

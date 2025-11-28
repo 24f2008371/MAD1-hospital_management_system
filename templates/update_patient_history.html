@@ -102,7 +102,7 @@
                                 <label class="form-label">
                                     <i class="fa-solid fa-flask me-2 text-primary"></i> Tests Done
                                 </label>
-                                <textarea name="tests" class="form-control" rows="3" 
+                                <textarea name="tests_done" class="form-control" rows="3" 
                                           placeholder="List tests conducted (if any)..."></textarea>
                             </div>
 
@@ -121,6 +121,10 @@
                                 <textarea name="medicines" class="form-control" rows="3" 
                                           placeholder="e.g. Paracetamol 500mg (Morning, Night)"></textarea>
                             </div>
+
+                           <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
+
+
 
                         </div>
 

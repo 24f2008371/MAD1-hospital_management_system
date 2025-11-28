@@ -59,6 +59,34 @@ def next_7_days():
 def homepage():
     return render_template("landing.html")
 
+# NEW ENQUIRY - LANDING PAGE
+@app.route("/submit_enquiry", methods=['POST'])
+def submit_enquiry():
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+        if name and email and message:
+                # Create a new Enquiry object and save it in the database
+                new_enquiry = Enquiry(name=name, email=email, message=message)
+                db.session.add(new_enquiry)
+                db.session.commit()
+                flash("Your enquiry has been received! Our team will contact you soon.", "success")
+    # Redirect back to the homepage (or wherever the form is located)
+    return redirect(url_for('homepage'))
+
+# endpoints for departments
+@app.route("/department/<string:dept_name>")
+def department_page(dept_name):
+    user_id = session.get("user_id")
+    this_user = User.query.get(user_id)
+    dept = Department.query.filter_by(name=dept_name).first()
+    if not dept:
+        flash("Department not found!", "danger")
+        return redirect("/patient")
+    # Get ALL doctors in this department
+    doctors = Doctor.query.filter_by(department_id=dept.id).all()
+    return render_template("department_page.html", department=dept, doctors=doctors, this_user = this_user)
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -200,7 +228,8 @@ def doctor_dash():
         flash("Doctor profile not found!", "danger")
         return redirect("/login")
 
-    appointments = Appointment.query.filter_by(doctor_id=doctor.id).all()
+    appointments = Appointment.query.filter_by(doctor_id=doctor.id,status="Upcoming").all()
+
     patients = {a.patient for a in appointments}
 
     return render_template("doctor_dash.html",
@@ -377,7 +406,7 @@ def patient_history():
         return redirect("/login")
 
     # -----------------------------
-    # ADMIN VIEWING A PATIENT
+    # ADMIN VIEWING A PATIENT (via URL ?id=XX)
     # -----------------------------
     patient_id = request.args.get("id")
     if patient_id and user.type == "admin":
@@ -397,12 +426,13 @@ def patient_history():
         )
 
     # -----------------------------
-    # NORMAL PATIENT VIEWING THEMSELVES
+    # PATIENT VIEWING THEIR OWN HISTORY
     # -----------------------------
-    patient = Patient.query.filter_by(user_id=user.id).first()
-    if not patient:
+    if user.type != "patient":
         flash("Unauthorized!", "danger")
         return redirect("/")
+
+    patient = Patient.query.filter_by(user_id=user.id).first_or_404()
 
     appointments = Appointment.query.filter_by(patient_id=patient.id).all()
     treatments = Treatment.query.join(Appointment).filter(
@@ -416,6 +446,7 @@ def patient_history():
         appointments=appointments,
         treatments=treatments
     )
+
 
 
 
@@ -636,51 +667,6 @@ def cancel_appointment(id):
 # APPOINTMENT CRUD (Doctor)
 # ---------------------------------------------------------
 
-@app.route("/edit_appointment/<int:appointment_id>", methods=['GET','POST'])
-def edit_appointment(appointment_id):
-    doctor, err = require_doctor()
-    if err: return err
-
-    appt = Appointment.query.get_or_404(appointment_id)
-
-    if appt.doctor_id != doctor.id:
-        flash("Unauthorized!", "danger")
-        return redirect("/doctor")
-
-    if request.method == "POST":
-        new_date = request.form.get("date")
-        new_time = request.form.get("time")
-
-        old_slot = Availability.query.filter_by(
-            doctor_id=doctor.id, date=appt.date, slot=appt.time
-        ).first()
-        if old_slot: old_slot.is_available = True
-
-        new_slot = Availability.query.filter_by(
-            doctor_id=doctor.id, date=new_date, slot=new_time
-        ).first()
-
-        if not new_slot:
-            flash("Slot does not exist!", "danger")
-            return redirect(request.referrer)
-
-        if not new_slot.is_available:
-            flash("Slot is already booked!", "danger")
-            return redirect(request.referrer)
-
-        new_slot.is_available = False
-
-        appt.date = new_date
-        appt.time = new_time
-        db.session.commit()
-
-        flash("Appointment updated!", "success")
-        return redirect("/doctor")
-
-    return render_template("edit_appointment.html",
-        appointment=appt, doctor=doctor)
-
-
 
 @app.route("/complete_appointment/<int:appointment_id>")
 def complete_appointment(appointment_id):
@@ -693,24 +679,30 @@ def complete_appointment(appointment_id):
         flash("Unauthorized!", "danger")
         return redirect("/doctor")
 
+    # create an empty treatment record or keep it minimal (so history exists)
     treatment = Treatment(
         appointment_id=appt.id,
         doctor_id=doctor.id,
         date=appt.date,
-        time=appt.time
+        time=appt.time,
+        visit_type=appt.visit_type or "Completed"
     )
     db.session.add(treatment)
 
     slot = Availability.query.filter_by(
         doctor_id=doctor.id, date=appt.date, slot=appt.time
     ).first()
-    if slot: slot.is_available = True
+    if slot:
+        slot.is_available = True
 
-    db.session.delete(appt)
+    # mark appointment completed instead of deleting
+    appt.status = "Completed"
+
     db.session.commit()
 
     flash("Appointment completed!", "success")
     return redirect("/doctor")
+
 
 
 
@@ -738,37 +730,62 @@ def delete_appointment(appointment_id):
 
 
 
-@app.route("/record_visit/<int:appointment_id>", methods=['GET','POST'])
+@app.route("/record_visit/<int:appointment_id>", methods=['GET', 'POST'])
 def record_visit(appointment_id):
     doctor, err = require_doctor()
-    if err: return err
+    if err:
+        return err
 
     appt = Appointment.query.get_or_404(appointment_id)
 
+    # doctor validation
     if appt.doctor_id != doctor.id:
         flash("Unauthorized!", "danger")
         return redirect("/doctor")
 
+    patient = appt.patient   # to show patient name in form
+
     if request.method == "POST":
-        t = Treatment(
+
+        # get form values
+        visit_type = request.form.get("visit_type")
+        diagnosis = request.form.get("diagnosis")
+        tests_done = request.form.get("tests_done")
+        prescription = request.form.get("prescription")
+        medicines = request.form.get("medicines")
+
+        # create treatment record
+        new_treatment = Treatment(
             appointment_id=appt.id,
             doctor_id=doctor.id,
             date=appt.date,
-            time=appt.time
+            time=appt.time,
+            visit_type=visit_type,
+            diagnosis=diagnosis,
+            tests_done=tests_done,
+            prescription=prescription,
+            medicines=medicines
         )
-        db.session.add(t)
 
+        db.session.add(new_treatment)
+        db.session.commit()   # ✅ save treatment first
+
+        # now free slot
         slot = Availability.query.filter_by(
             doctor_id=doctor.id, date=appt.date, slot=appt.time
         ).first()
-        if slot: slot.is_available = True
+        if slot:
+            slot.is_available = True
 
-        db.session.delete(appt)
+        # now delete appointment safely
+        appt.status = "Completed"
         db.session.commit()
 
-        flash("Visit recorded!", "success")
+
+        flash("Visit Recorded Successfully!", "success")
         return redirect("/doctor")
 
-    return render_template("record_visit.html",
-        appointment=appt, patient=appt.patient, doctor=doctor)
+    # GET request -> render form
+    return render_template("update_patient_history.html", appointment=appt, patient=patient)
+
 

@@ -20,7 +20,7 @@ class Doctor(db.Model):
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     type = db.Column(db.String(), nullable=False)
     experience = db.Column(db.Integer(), nullable=False)
-    appointment = db.relationship('Appointment', backref='doctor', cascade="all, delete-orphan")
+    appointment = db.relationship('Appointment', backref='doctor')
     availability = db.relationship('Availability', backref='doctor', cascade="all, delete-orphan")
 
 
@@ -34,7 +34,7 @@ class Patient(db.Model):
     gender = db.Column(db.String(), nullable=False)
     phone = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False)
-    appointment = db.relationship('Appointment', backref='patient', cascade="all, delete-orphan")
+    appointment = db.relationship('Appointment', backref='patient')
 
 class Department(db.Model):
     __tablename__ = 'department'
@@ -51,6 +51,7 @@ class Appointment(db.Model):
     date = db.Column(db.String(), nullable=False)
     time = db.Column(db.String(), nullable=False)
     visit_type = db.Column(db.String(), default="In-person", nullable=False)
+    status = db.Column(db.String(), default="Upcoming")
 
     
 class Treatment(db.Model):
@@ -67,7 +68,8 @@ class Treatment(db.Model):
     prescription = db.Column(db.String(), nullable = True)
     medicines = db.Column(db.String(), nullable = True)
 
-    appointment = db.relationship('Appointment', backref=db.backref('treatment', uselist=False))
+    appointment = db.relationship('Appointment',backref=db.backref('treatments', passive_deletes=True))
+
     doctor = db.relationship('Doctor', backref='treatments')
 
 
