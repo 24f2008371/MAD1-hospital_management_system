@@ -4,6 +4,36 @@ from sqlalchemy import or_, and_
 from .models import *
 from datetime import datetime, timedelta
 
+SLOT_RANGES = {
+    "morning": ("08:00", "12:00"),   # 8 AM - 12 PM
+    "evening": ("16:00", "21:00"),   # 4 PM - 9 PM
+}
+
+
+def validate_future_slot(date_str, slot_key):
+    SLOT_RANGES = {
+        "morning": ("08:00", "12:00"),   # 8 AM – 12 PM
+        "evening": ("16:00", "21:00"),   # 4 PM – 9 PM
+    }
+
+    if slot_key not in SLOT_RANGES:
+        return False
+
+    # parse date (YYYY-MM-DD)
+    y, m, d = map(int, date_str.split("-"))
+
+    # slot end time
+    end_hh, end_mm = map(int, SLOT_RANGES[slot_key][1].split(":"))
+
+    # selected slot end datetime
+    slot_end = datetime(y, m, d, end_hh, end_mm)
+
+    # current time (local machine time — works perfectly)
+    now = datetime.now()
+
+    return slot_end > now
+
+
 
 # ---------------------------------------------------------
 # 🔥 HELPER UTILS (replace 200 lines of repeated code)
@@ -307,11 +337,23 @@ def edit_patient(id):
     patient = Patient.query.get_or_404(id)
 
     if request.method == "POST":
+
+        new_name = request.form.get("name")
+        new_email = request.form.get("email")
+        new_age = request.form.get("age")
+        new_gender = request.form.get("gender")
+        new_phone = request.form.get("phone")
+        
+        # Update patient table
         patient.name = request.form.get("name")
         patient.email = request.form.get("email")
         patient.age = request.form.get("age")
         patient.gender = request.form.get("gender")
         patient.phone = request.form.get("phone")
+
+        # Update user table
+        user = User.query.get(patient.user_id)
+        user.username = new_name
 
         db.session.commit()
         flash("Patient updated successfully!", "success")
@@ -337,6 +379,23 @@ def unblacklist_patient(id):
     flash("Patient unblacklisted!", "success")
     return redirect("/admin")
 
+# ---------------------------------------------------------
+# VIEW DOCTOR DETAILS FROM PATIENT DB IN DEPARTMENTS
+# ---------------------------------------------------------
+
+@app.route("/doctor/details/<int:id>")
+def doctor_details(id):
+    patient, err = require_patient()
+    if err:
+        return err   # only patients should view doctor details
+
+    doctor = Doctor.query.get_or_404(id)
+
+    return render_template(
+        "doctor_details.html",
+        doctor=doctor,
+        this_user=current_user()
+    )
 
 
 # ---------------------------------------------------------
@@ -431,11 +490,12 @@ def patient_history():
     if not user:
         return redirect("/login")
 
-    # -----------------------------
-    # ADMIN VIEWING A PATIENT (via URL ?id=XX)
-    # -----------------------------
     patient_id = request.args.get("id")
-    if patient_id and user.type == "admin":
+
+    # -----------------------------------
+    # ADMIN & DOCTOR VIEW ANY PATIENT BY ID
+    # -----------------------------------
+    if patient_id and user.type in ["admin", "doctor"]:
         patient = Patient.query.get_or_404(patient_id)
 
         appointments = Appointment.query.filter_by(patient_id=patient.id).all()
@@ -451,27 +511,30 @@ def patient_history():
             treatments=treatments
         )
 
-    # -----------------------------
-    # PATIENT VIEWING THEIR OWN HISTORY
-    # -----------------------------
-    if user.type != "patient":
-        flash("Unauthorized!", "danger")
-        return redirect("/")
+    # -----------------------------------
+    # PATIENT VIEW OWN HISTORY
+    # -----------------------------------
+    if user.type == "patient":
+        patient = Patient.query.filter_by(user_id=user.id).first_or_404()
 
-    patient = Patient.query.filter_by(user_id=user.id).first_or_404()
+        appointments = Appointment.query.filter_by(patient_id=patient.id).all()
+        treatments = Treatment.query.join(Appointment).filter(
+            Appointment.patient_id == patient.id
+        ).all()
 
-    appointments = Appointment.query.filter_by(patient_id=patient.id).all()
-    treatments = Treatment.query.join(Appointment).filter(
-        Appointment.patient_id == patient.id
-    ).all()
+        return render_template(
+            "patient_history.html",
+            this_user=user,
+            patient=patient,
+            appointments=appointments,
+            treatments=treatments
+        )
 
-    return render_template(
-        "patient_history.html",
-        this_user=user,
-        patient=patient,
-        appointments=appointments,
-        treatments=treatments
-    )
+    # -----------------------------------
+    # OTHER USERS → BLOCK
+    # -----------------------------------
+    flash("Unauthorized!", "danger")
+    return redirect("/")
 
 
 
@@ -568,11 +631,17 @@ def delete_availability(id):
 @app.route("/doctor/set_availability", methods=['GET','POST'])
 def doctor_set_availability():
     doctor, err = require_doctor()
-    if err: return err
+    if err: 
+        return err
 
     if request.method == "POST":
         date = request.form["date"]
         slot = request.form["slot"]
+
+        # ✅ NOW the validation is inside POST block
+        if not validate_future_slot(date, slot):
+            flash("You cannot set availability for a past time or expired slot!", "danger")
+            return redirect("/doctor/set_availability")
 
         existing = Availability.query.filter_by(
             doctor_id=doctor.id, date=date, slot=slot
@@ -582,17 +651,26 @@ def doctor_set_availability():
             existing.is_available = True
         else:
             db.session.add(Availability(
-                doctor_id=doctor.id, date=date, slot=slot, is_available=True
+                doctor_id=doctor.id,
+                date=date,
+                slot=slot,
+                is_available=True
             ))
 
         db.session.commit()
         flash("Availability saved!", "success")
         return redirect("/doctor/set_availability")
 
+    # GET request → just load page
     slots = Availability.query.filter_by(doctor_id=doctor.id).all()
 
-    return render_template("doctor_set_availability.html",
-        doctor=doctor, next_days=next_7_days(), slots=slots)
+    return render_template(
+        "doctor_set_availability.html",
+        doctor=doctor,
+        next_days=next_7_days(),
+        slots=slots
+    )
+
 
 
 
@@ -625,6 +703,10 @@ def book_slot(slot_id):
     if err: return err
 
     slot = Availability.query.get_or_404(slot_id)
+    # ❌ Extra safety: prevent booking past time
+    if not validate_future_slot(slot.date, slot.slot):
+        flash("This slot has already expired. Please select another.", "danger")
+        return redirect("/patient")
     slot.is_available = False
 
     new_appt = Appointment(
@@ -726,9 +808,8 @@ def complete_appointment(appointment_id):
 
     db.session.commit()
 
-    flash("Appointment completed!", "success")
+    flash("Appointment completed!", "warning")
     return redirect("/doctor")
-
 
 
 
@@ -751,13 +832,13 @@ def delete_appointment(appointment_id):
     db.session.delete(appt)
     db.session.commit()
 
-    flash("Appointment deleted!", "success")
+    flash("Appointment deleted!", "danger")
     return redirect("/doctor")
 
 
 
-@app.route("/record_visit/<int:appointment_id>", methods=['GET', 'POST'])
-def record_visit(appointment_id):
+@app.route("/update_appointment/<int:appointment_id>", methods=['GET', 'POST'])
+def update_appointment(appointment_id):
     doctor, err = require_doctor()
     if err:
         return err
@@ -803,12 +884,10 @@ def record_visit(appointment_id):
         if slot:
             slot.is_available = True
 
-        # now delete appointment safely
-        appt.status = "Completed"
         db.session.commit()
 
 
-        flash("Visit Recorded Successfully!", "success")
+        flash("Updated Successfully!", "success")
         return redirect("/doctor")
 
     # GET request -> render form

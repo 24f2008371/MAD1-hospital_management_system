@@ -43,17 +43,6 @@
                     <li class="nav-item d-none d-lg-block">
                         <span class="navbar-text fw-bold me-3">Welcome, {{this_user.username}}!</span>
                     </li>
-                    <li class="nav-item">
-                        <a href="/edit_profile?username={{this_user.username}}" class="nav-link">Edit Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/patient_history" class="nav-link">History</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/logout" class="btn btn-outline-danger ms-lg-2">
-                            Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -80,7 +69,7 @@
                         </li>
                         <li class="list-group-item px-0 py-3">
                             <strong class="d-block text-muted mb-1">Experience</strong>
-                            <span class_ ="fs-5">{{ doctor.experience }} years</span>
+                            <span class ="fs-5">{{ doctor.experience }} years</span>
                         </li>
                         <li class="list-group-item px-0 py-3">
                             <strong class="d-block text-muted mb-1">Department</strong>
@@ -89,7 +78,7 @@
                     </ul>
 
                     <div class="mt-4 pt-4 border-top">
-                        <a href="/book_appointment/{{ doctor.id }}" class="btn btn-primary btn-lg w-100">
+                        <a href="/doctor/check_availability/{{ doctor.id }}" class="btn btn-primary btn-lg w-100">
                             <i class="fa-solid fa-calendar-check me-2"></i> Check Availability & Book
                         </a>
                     </div>
