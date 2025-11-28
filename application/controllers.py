@@ -349,14 +349,23 @@ def edit_doctor(id):
     departments = Department.query.all()
 
     if request.method == "POST":
+        new_name = request.form.get("doctor_name")
+        new_email = request.form.get("email")
+        new_exp = request.form.get("experience")
+        new_dept = request.form.get("department_id")
+        new_pass = request.form.get("password")
+
         doctor.doctor_name = request.form.get("doctor_name")
         doctor.email = request.form.get("email")
         doctor.experience = request.form.get("experience")
         doctor.department_id = request.form.get("department_id")
 
-        new_pass = request.form.get("password")
+        # Update USER table also
+        user = User.query.get(doctor.user_id)
+        user.username = new_name
         if new_pass.strip():
             doctor.password = new_pass
+            user.password = new_pass 
 
         db.session.commit()
         flash("Doctor updated successfully!", "success")
@@ -371,8 +380,10 @@ def edit_doctor(id):
 def delete_doctor(doctor_id):
     doctor = Doctor.query.get_or_404(doctor_id)
 
+    active_app = Appointment.query.filter_by(doctor_id = doctor.id, status = "Upcoming").all()
+
     # Check if doctor has any appointments
-    if doctor.appointment and len(doctor.appointment) > 0:
+    if active_app:
         flash("Cannot delete doctor. They still have appointments assigned.", "danger")
         return redirect('/admin')
 
@@ -480,7 +491,7 @@ def add_doctor():
         password = request.form.get("password")
 
         if not username.lower().startswith("dr."):
-            username = f"Dr. {username}"
+            username = f"{username}"
 
         if Doctor.query.filter_by(doctor_name=username).first():
             flash("Doctor already exists!", "danger")

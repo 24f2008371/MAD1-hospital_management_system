@@ -46,8 +46,8 @@ class Department(db.Model):
 class Appointment(db.Model):
     __tablename__ = 'appointment'
     id = db.Column(db.Integer(),primary_key = True)
-    patient_id = db.Column(db.Integer(), db.ForeignKey('patient.id', ondelete="CASCADE"), nullable=False)
-    doctor_id = db.Column(db.Integer(), db.ForeignKey('doctor.id', ondelete="CASCADE"), nullable=False)
+    patient_id = db.Column(db.Integer(), db.ForeignKey('patient.id', ondelete="CASCADE"), nullable=True)
+    doctor_id = db.Column(db.Integer(), db.ForeignKey('doctor.id', ondelete="CASCADE"), nullable=True)
     date = db.Column(db.String(), nullable=False)
     time = db.Column(db.String(), nullable=False)
     visit_type = db.Column(db.String(), default="In-person", nullable=False)
