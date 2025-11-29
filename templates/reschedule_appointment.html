@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reschedule Appointment - MediCare</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/1dfadc4f8b.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light grey background */
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.75rem; /* Thode rounded corners */
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+    </style>
+</head>
+
+<body class="p-4">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top mb-4" style="border-radius: 0.75rem;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/patient">
+                <img src="{{ url_for('static', filename='logo2.png') }}" alt="Logo" style="height: 40px; border-radius: 50%;">
+                <span class="fw-bold ms-2">MediCare</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#patientNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="patientNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item d-none d-lg-block">
+                        <span class="navbar-text fw-bold me-3">Welcome, {{this_user.username}}!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/edit_profile?username={{this_user.username}}" class="nav-link">Edit Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/patient_history" class="nav-link">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/login" class="btn btn-outline-danger ms-lg-2">
+                            Logout <i class="fa-solid fa-right-from-bracket ms-1"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <div class="d-flex align-items-center mb-4">
+            <a href="/patient" class="btn btn-secondary me-3">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+            <h2 class="mb-0 fw-bold">Reschedule Appointment</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-sm p-4 p-md-5">
+
+                    <div class="alert alert-light border mb-4">
+                        <h5 class="alert-heading fw-bold mb-3"><i class="fa-solid fa-info-circle me-2 text-primary"></i>Current Details</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <small class="text-muted text-uppercase fw-bold d-block">Doctor</small>
+                                <span class="fs-5 fw-semibold text-dark">Dr. {{ doctor.doctor_name }}</span>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted text-uppercase fw-bold d-block">Current Slot</small>
+                                <span class="fs-5 fw-semibold text-dark">{{ appointment.date }} ({{ appointment.time }})</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST">
+                        <h4 class="fw-bold mb-3">Select New Slot</h4>
+
+                        {% if slots %}
+                            <div class="mb-4">
+                                <label class="form-label">Available Slots</label>
+                                <select name="slot_id" class="form-select form-select-lg" required>
+                                    <option value="" selected disabled>Choose a new date & time...</option>
+                                    
+                                    {% for s in slots %}
+                                        <option value="{{ s.id }}">
+                                            {{ s.date }} — 
+                                            {% if s.slot == "morning" %} 
+                                                08:00 AM – 12:00 PM 
+                                            {% else %} 
+                                                04:00 PM – 09:00 PM 
+                                            {% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="d-grid pt-2">
+                                <button class="btn btn-primary btn-lg">
+                                    Confirm Reschedule <i class="fa-solid fa-check-circle ms-2"></i>
+                                </button>
+                            </div>
+
+                        {% else %}
+                            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                <i class="fa-solid fa-triangle-exclamation me-3 fs-4"></i>
+                                <div>
+                                    <strong>No available slots!</strong>
+                                    <p class="mb-0">This doctor has no other free slots available right now. Please try again later.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

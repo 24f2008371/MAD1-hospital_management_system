@@ -68,93 +68,102 @@
         </div>
     </nav>
 
-    <main class="container-fluid">
+    <main class="container">
 
-        <h2 class="mb-4">Patients' Dashboard</h2>
-
-        <div class="row">
-
-            <div class="col-lg-5">
-
-                <div class="card shadow-sm p-4 mb-4">
-                    <div class="mb-3 pb-3 border-bottom">
-                        <h4 class="mb-0"><i class="fa-solid fa-hospital-user me-2"></i> Departments</h4>
-                    </div>
-
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <strong>Cardiology</strong>
-                            <a href="department/Cardiology" class="btn btn-sm btn-primary">View Details</a>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <strong>Oncology</strong>
-                            <a href="department/Oncology" class="btn btn-sm btn-primary">View Details</a>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <strong>General</strong>
-                            <a href="department/General" class="btn btn-sm btn-primary">View Details</a>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <strong>Neurology</strong>
-                            <a href="department/Neurology" class="btn btn-sm btn-primary">View Details</a>
-                        </li>
-                    </ul>
-                </div>
+        <!-- 1️⃣ DEPARTMENTS SECTION -->
+        <div class="card shadow-sm p-4 mb-4">
+            <div class="mb-3 pb-3 border-bottom">
+                <h4 class="mb-0">
+                    <i class="fa-solid fa-hospital-user me-2"></i> Departments
+                </h4>
             </div>
 
-            <div class="col-lg-7">
-                <div class="card shadow-sm p-4 mb-4">
-                    <div class="mb-3 pb-3 border-bottom">
-                        <h4 class="mb-0"><i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments</h4>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">Doctor Name</th>
-                                    <th scope="col">Department</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Time</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if appointments %}
-                                {% for a in appointments %}
-                                <tr>
-                                    <td>{{ loop.index }}</td>
-                                    <td>{{ a.doctor.doctor_name }}</td>
-                                    <td>{{ a.doctor.department.name }}</td>
-                                    <td>{{ a.date }}</td>
-                                    <td>
-                                        {% if a.time == "morning" %}
-                                        08 AM – 12 PM
-                                        {% else %}
-                                        04 PM – 09 PM
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <a href="/cancel_appointment/{{ a.id }}" class="btn btn-danger btn-sm">
-                                            Cancel
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                {% else %}
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No upcoming appointments.</td>
-                                </tr>
-                                {% endif %}
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <strong>Cardiology</strong>
+                    <a href="department/Cardiology" class="btn btn-sm btn-primary">View Details</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <strong>Oncology</strong>
+                    <a href="department/Oncology" class="btn btn-sm btn-primary">View Details</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <strong>General</strong>
+                    <a href="department/General" class="btn btn-sm btn-primary">View Details</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <strong>Neurology</strong>
+                    <a href="department/Neurology" class="btn btn-sm btn-primary">View Details</a>
+                </li>
+            </ul>
         </div>
+
+
+        <!-- 2️⃣ UPCOMING APPOINTMENTS SECTION -->
+        <div class="card shadow-sm p-4 mb-4">
+            <div class="mb-3 pb-3 border-bottom">
+                <h4 class="mb-0">
+                    <i class="fa-solid fa-calendar-check me-2"></i> Upcoming Appointments
+                </h4>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Doctor Name</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if appointments %}
+                        {% for a in appointments %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ a.doctor.doctor_name }}</td>
+                            <td>{{ a.doctor.department.name }}</td>
+                            <td>{{ a.date }}</td>
+
+                            <td>
+                                {% if a.time == "morning" %}
+                                08 AM – 12 PM
+                                {% else %}
+                                04 PM – 09 PM
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="/reschedule_appointment/{{ a.id }}" class="btn btn-warning btn-sm">
+                                        Reschedule
+                                    </a>
+
+                                    <a href="/cancel_appointment/{{ a.id }}" class="btn btn-danger btn-sm">
+                                        Cancel
+                                    </a>
+                                </div>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                No upcoming appointments.
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
 
 </body>

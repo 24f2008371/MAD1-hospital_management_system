@@ -770,6 +770,71 @@ def cancel_appointment(id):
     return redirect("/patient")
 
 
+# ---------------------------------------------------------
+# RESCHEDULE APPOINTMENT (Patient)
+# ---------------------------------------------------------
+
+@app.route("/reschedule_appointment/<int:id>", methods=['GET', 'POST'])
+def reschedule_appointment(id):
+    patient, err = require_patient()
+    if err: return err
+
+    appt = Appointment.query.get_or_404(id)
+
+    # Patient authorization check
+    if appt.patient_id != patient.id:
+        flash("Unauthorized!", "danger")
+        return redirect("/patient")
+
+    doctor = appt.doctor
+
+    # Fetch doctor availability
+    slots = Availability.query.filter_by(doctor_id=doctor.id, is_available=True).all()
+
+    if request.method == "POST":
+        new_slot_id = request.form.get("slot_id")
+        if not new_slot_id:
+            flash("Please select a valid slot.", "danger")
+            return redirect(request.url)
+
+        new_slot = Availability.query.get_or_404(new_slot_id)
+
+        # Prevent past booking
+        if not validate_future_slot(new_slot.date, new_slot.slot):
+            flash("You cannot book a past or expired slot!", "danger")
+            return redirect(request.url)
+
+        # Free old slot
+        old_slot = Availability.query.filter_by(
+            doctor_id=doctor.id, date=appt.date, slot=appt.time
+        ).first()
+        if old_slot:
+            old_slot.is_available = True
+
+        # Occupy new slot
+        new_slot.is_available = False
+
+        # Update appointment
+        appt.date = new_slot.date
+        appt.time = new_slot.slot
+
+        db.session.commit()
+
+        flash("Appointment rescheduled successfully!", "success")
+        return redirect("/patient")
+
+    # GET → show form
+    return render_template(
+        "reschedule_appointment.html",
+        appointment=appt,
+        doctor=doctor,
+        slots=slots,
+        patient=patient,
+        this_user=current_user()
+    )
+
+
+
 
 # ---------------------------------------------------------
 # APPOINTMENT CRUD (Doctor)
