@@ -213,6 +213,7 @@ def admin_dash():
         patients = Patient.query.filter_by(blocked=False).all()
         blacklisted_patients = Patient.query.filter_by(blocked=True).all()
         upcoming = Appointment.query.join(Patient).join(Doctor).filter(Appointment.status == "Upcoming").all()
+        completed = Appointment.query.filter_by(status="Completed").all()
 
     else:
         like = f"%{q}%"
@@ -237,8 +238,19 @@ def admin_dash():
             or_(Patient.name.ilike(like), Doctor.doctor_name.ilike(like), Doctor.email.ilike(like))
         ).all()
 
+        completed = Appointment.query.filter(
+            Appointment.status == "Completed",
+            or_(Patient.name.ilike(like), Doctor.doctor_name.ilike(like), Doctor.email.ilike(like))
+        ).all()
+
 
     this_user = User.query.filter_by(type="admin").first()
+
+    # === DASHBOARD STATS ===
+    total_doctors = Doctor.query.count()
+    total_patients = Patient.query.count()
+    total_appointments = Appointment.query.filter_by(status="Upcoming").count()
+
 
     return render_template("admin_dash.html",
         this_user=this_user,
@@ -247,8 +259,11 @@ def admin_dash():
         q=q,
         blacklisted_patients=blacklisted_patients,
         blacklisted_doctors=blacklisted_doctors,
-        upcoming=upcoming)
-
+        upcoming=upcoming,
+        total_doctors=total_doctors,
+        total_patients=total_patients,
+        total_appointments=total_appointments,
+        completed = completed)
 
 
 # ---------------------------------------------------------
@@ -781,6 +796,8 @@ def cancel_appointment(id):
     if appt.patient_id != patient.id:
         flash("Unauthorized!", "danger")
         return redirect("/patient")
+    
+    appt.status = "Cancelled"
 
     slot = Availability.query.filter_by(
         doctor_id=appt.doctor_id, date=appt.date, slot=appt.time
@@ -789,7 +806,6 @@ def cancel_appointment(id):
     if slot:
         slot.is_available = True
 
-    db.session.delete(appt)
     db.session.commit()
 
     flash("Appointment cancelled!", "danger")

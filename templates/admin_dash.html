@@ -140,6 +140,33 @@
             </div>
         </div>
 
+        <!-- STAT CARDS -->
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h5 class="fw-bold mb-1">Total Doctors</h5>
+                    <h2 class="text-primary mb-0">{{ total_doctors }}</h2>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h5 class="fw-bold mb-1">Total Patients</h5>
+                    <h2 class="text-success mb-0">{{ total_patients }}</h2>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h5 class="fw-bold mb-1">Upcoming Appointments</h5>
+                    <h2 class="text-danger mb-0">{{ total_appointments }}</h2>
+                </div>
+            </div>
+
+        </div>
+
+
         <!-- Registered Doctors -->
         <div class="card p-4 mb-4">
             <div class="section-header">
@@ -272,7 +299,68 @@
 
         </div>
 
+        <!-- Completed Appointments -->
+        <div class="card p-4 mb-4">
+            <div class="section-header">
+                <h4><i class="fa-solid fa-calendar-check me-2 text-success"></i> Completed Appointments</h4>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Dept</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in completed %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ a.patient.name }}</td>
+                            <td>{{ a.doctor.doctor_name }}</td>
+                            <td>{{ a.doctor.department.name }}</td>
+                            <td>{{ a.date }}</td>
+
+                            <td>
+                                {% if a.time == "morning" %}
+                                08:00 AM – 12:00 PM
+                                {% else %}
+                                04:00 PM – 09:00 PM
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <a href="/patient_history?id={{ a.patient_id }}" class="btn btn-primary btn-sm">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
     </main>
+
+    <!-- Flash messages vanish in 2 seconds -->
+    <script>
+        setTimeout(() => {
+            const flashContainer = document.getElementById("flash-container");
+            if (flashContainer) {
+                flashContainer.classList.add("fade");
+                flashContainer.style.transition = "opacity 0.5s";
+                flashContainer.style.opacity = "0";
+
+                setTimeout(() => flashContainer.remove(), 500);  // remove after fade
+            }
+        }, 2000); // 2 seconds
+    </script>
 
 </body>
 
