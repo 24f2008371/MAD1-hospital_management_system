@@ -4,6 +4,10 @@ from sqlalchemy import or_, and_
 from .models import *
 from datetime import datetime, timedelta
 
+# ---------------------------------------------------------
+# SLOT RANGE DEFINER AND FUNCTION
+# ---------------------------------------------------------
+
 SLOT_RANGES = {
     "morning": ("08:00", "12:00"),   # 8 AM - 12 PM
     "evening": ("16:00", "21:00"),   # 4 PM - 9 PM
@@ -36,7 +40,7 @@ def validate_future_slot(date_str, slot_key):
 
 
 # ---------------------------------------------------------
-# 🔥 HELPER UTILS (replace 200 lines of repeated code)
+# HELPER FUNCTIONS
 # ---------------------------------------------------------
 
 def current_user():
@@ -683,13 +687,20 @@ def patient_check_availability(doctor_id):
     doctor_obj = Doctor.query.get_or_404(doctor_id)
 
     slots = Availability.query.filter_by(doctor_id=doctor_obj.id).all()
-    slots_map = {f"{s.date}|{s.slot}": s for s in slots}
 
-    return render_template("patient_check_availability.html",
+    valid_slots = {}
+    for s in slots:
+        if validate_future_slot(s.date, s.slot) and s.is_available:
+            valid_slots[f"{s.date}|{s.slot}"] = s
+
+    return render_template(
+        "patient_check_availability.html",
         doctor=doctor_obj,
         next_days=next_7_days(),
-        slots_map=slots_map,
-        this_user=current_user())
+        slots_map=valid_slots,
+        this_user=current_user()
+    )
+
 
 
 
@@ -700,13 +711,28 @@ def patient_check_availability(doctor_id):
 @app.route("/book_slot/<int:slot_id>", methods=['POST'])
 def book_slot(slot_id):
     patient, err = require_patient()
-    if err: return err
+    if err: 
+        return err
 
     slot = Availability.query.get_or_404(slot_id)
-    # ❌ Extra safety: prevent booking past time
+
+    # ❌ Check if this slot is expired
     if not validate_future_slot(slot.date, slot.slot):
         flash("This slot has already expired. Please select another.", "danger")
         return redirect("/patient")
+
+    # ❌ Prevent double-booking same date+time
+    existing = Appointment.query.filter_by(
+        patient_id=patient.id,
+        date=slot.date,
+        time=slot.slot
+    ).first()
+
+    if existing:
+        flash("You already have an appointment at this time!", "danger")
+        return redirect("/patient")
+
+    # Mark slot as unavailable
     slot.is_available = False
 
     new_appt = Appointment(
@@ -766,7 +792,7 @@ def cancel_appointment(id):
     db.session.delete(appt)
     db.session.commit()
 
-    flash("Appointment cancelled!", "success")
+    flash("Appointment cancelled!", "danger")
     return redirect("/patient")
 
 
@@ -941,15 +967,6 @@ def update_appointment(appointment_id):
 
         db.session.add(new_treatment)
         db.session.commit()   # ✅ save treatment first
-
-        # now free slot
-        slot = Availability.query.filter_by(
-            doctor_id=doctor.id, date=appt.date, slot=appt.time
-        ).first()
-        if slot:
-            slot.is_available = True
-
-        db.session.commit()
 
 
         flash("Updated Successfully!", "success")

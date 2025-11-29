@@ -68,6 +68,20 @@
         </div>
     </nav>
 
+        <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flash-container" class="container mt-3">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+
     <main class="container">
 
         <!-- 1️⃣ DEPARTMENTS SECTION -->
@@ -165,6 +179,20 @@
         </div>
 
     </main>
+
+    <!-- Flash messages vanish in 2 seconds -->
+    <script>
+        setTimeout(() => {
+            const flashContainer = document.getElementById("flash-container");
+            if (flashContainer) {
+                flashContainer.classList.add("fade");
+                flashContainer.style.transition = "opacity 0.5s";
+                flashContainer.style.opacity = "0";
+
+                setTimeout(() => flashContainer.remove(), 500);  // remove after fade
+            }
+        }, 2000); // 2 seconds
+    </script>
 
 </body>
 
