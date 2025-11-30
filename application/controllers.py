@@ -118,8 +118,12 @@ def department_page(dept_name):
     if not dept:
         flash("Department not found!", "danger")
         return redirect("/patient")
-    # Get ALL doctors in this department
-    doctors = Doctor.query.filter_by(department_id=dept.id).all()
+    
+    # Get ALL doctors in this department - who arent blacklisted
+    doctors = [
+    d for d in Doctor.query.filter_by(department_id=dept.id).all()
+    if d.user.blocked == False]
+
     return render_template("department_page.html", department=dept, doctors=doctors, this_user = this_user)
 
 
@@ -150,13 +154,13 @@ def login():
             flash("Your account has been blacklisted by the admin!", "danger")
             return redirect("/login")
 
-        # redirects
+        # redirects — use redirects so the /patient handler runs and loads appointments
         if this_user.type == "admin":
             return redirect("/admin")
         elif this_user.type == "doctor":
             return redirect("/doctor")
         else:
-            return render_template("patient_dash.html", username=username, this_user=this_user)
+            return redirect("/patient")   # <-- changed from render_template to redirect
 
     return render_template("login.html")
 
@@ -250,6 +254,7 @@ def admin_dash():
     total_doctors = Doctor.query.count()
     total_patients = Patient.query.count()
     total_appointments = Appointment.query.filter_by(status="Upcoming").count()
+    total_completed = Appointment.query.filter_by(status="Completed").count()
 
 
     return render_template("admin_dash.html",
@@ -263,6 +268,7 @@ def admin_dash():
         total_doctors=total_doctors,
         total_patients=total_patients,
         total_appointments=total_appointments,
+        total_completed=total_completed,
         completed = completed)
 
 
