@@ -98,7 +98,7 @@
     </nav>
 
     <!-- FLASH MESSAGES -->
-    <div class="container-fluid px-4 mt-3">
+    <div class="container-fluid px-4 mt-3" id = "flash-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}
@@ -186,7 +186,8 @@
                 {% for d in doctors %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
-                        <strong>Dr. {{ d.doctor_name }}</strong><br>
+                        <strong>Dr. {{ d.doctor_name }}</strong><br> 
+                        <!-- add .upper() for upper case -->
                         <small class="text-muted">{{ d.email }}</small>
                     </div>
                     <div class="admin-buttons">

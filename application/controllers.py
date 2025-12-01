@@ -154,13 +154,12 @@ def login():
             flash("Your account has been blacklisted by the admin!", "danger")
             return redirect("/login")
 
-        # redirects — use redirects so the /patient handler runs and loads appointments
         if this_user.type == "admin":
             return redirect("/admin")
         elif this_user.type == "doctor":
             return redirect("/doctor")
         else:
-            return redirect("/patient")   # <-- changed from render_template to redirect
+            return redirect("/patient")  
 
     return render_template("login.html")
 
@@ -303,7 +302,11 @@ def patient_dash():
     patient, err = require_patient()
     if err: return err
 
-    appointments = Appointment.query.filter_by(patient_id=patient.id).all()
+    appointments = Appointment.query.filter(
+        Appointment.patient_id == patient.id,
+        Appointment.status != "Cancelled"
+    ).all()
+
 
     return render_template("patient_dash.html",
         this_user=current_user(),
@@ -404,15 +407,17 @@ def unblacklist_patient(id):
     flash("Patient unblacklisted!", "success")
     return redirect("/admin")
 
+
+
 # ---------------------------------------------------------
-# VIEW DOCTOR DETAILS FROM PATIENT DB IN DEPARTMENTS
+# VIEW DOCTOR DETAILS FROM PATIENT -- DEPARTMENTS
 # ---------------------------------------------------------
 
 @app.route("/doctor/details/<int:id>")
 def doctor_details(id):
     patient, err = require_patient()
     if err:
-        return err   # only patients should view doctor details
+        return err  
 
     doctor = Doctor.query.get_or_404(id)
 
@@ -488,10 +493,23 @@ def delete_doctor(doctor_id):
 def blacklist_doctor(id):
     doctor = Doctor.query.get_or_404(id)
     user = User.query.get(doctor.user_id)
+
+    # Has upcoming appt??
+    active_appointments = Appointment.query.filter_by(
+        doctor_id=doctor.id,
+        status="Upcoming"
+    ).all()
+
+    if active_appointments:
+        flash("Cannot blacklist doctor — they still have upcoming appointments!", "danger")
+        return redirect("/admin")
+
+    # Else, blacklist
     user.blocked = True
     db.session.commit()
     flash("Doctor blacklisted!", "warning")
     return redirect("/admin")
+
 
 
 @app.route("/unblacklist_doctor/<int:id>")
@@ -517,9 +535,7 @@ def patient_history():
 
     patient_id = request.args.get("id")
 
-    # -----------------------------------
-    # ADMIN & DOCTOR VIEW ANY PATIENT BY ID
-    # -----------------------------------
+    # ADMIN & DOCTOR CAN VIEW ANY PATIENT BY ID
     if patient_id and user.type in ["admin", "doctor"]:
         patient = Patient.query.get_or_404(patient_id)
 
@@ -536,9 +552,7 @@ def patient_history():
             treatments=treatments
         )
 
-    # -----------------------------------
-    # PATIENT VIEW OWN HISTORY
-    # -----------------------------------
+    # PATIENT CAN VIEW THEIR OWN HISTOYR
     if user.type == "patient":
         patient = Patient.query.filter_by(user_id=user.id).first_or_404()
 
@@ -555,9 +569,6 @@ def patient_history():
             treatments=treatments
         )
 
-    # -----------------------------------
-    # OTHER USERS → BLOCK
-    # -----------------------------------
     flash("Unauthorized!", "danger")
     return redirect("/")
 
@@ -663,7 +674,7 @@ def doctor_set_availability():
         date = request.form["date"]
         slot = request.form["slot"]
 
-        # ✅ NOW the validation is inside POST block
+        # check if the slot has expired
         if not validate_future_slot(date, slot):
             flash("You cannot set availability for a past time or expired slot!", "danger")
             return redirect("/doctor/set_availability")
@@ -686,7 +697,6 @@ def doctor_set_availability():
         flash("Availability saved!", "success")
         return redirect("/doctor/set_availability")
 
-    # GET request → just load page
     slots = Availability.query.filter_by(doctor_id=doctor.id).all()
 
     return render_template(
@@ -737,16 +747,17 @@ def book_slot(slot_id):
 
     slot = Availability.query.get_or_404(slot_id)
 
-    # ❌ Check if this slot is expired
+    # Check if this slot is expired
     if not validate_future_slot(slot.date, slot.slot):
         flash("This slot has already expired. Please select another.", "danger")
         return redirect("/patient")
 
-    # ❌ Prevent double-booking same date+time
+    # Prevent double-booking same date+time
     existing = Appointment.query.filter_by(
         patient_id=patient.id,
         date=slot.date,
-        time=slot.slot
+        time=slot.slot,
+        status = "Upcoming"
     ).first()
 
     if existing:
@@ -812,6 +823,7 @@ def cancel_appointment(id):
     if slot:
         slot.is_available = True
 
+    # db.session.delete(appt)
     db.session.commit()
 
     flash("Appointment cancelled!", "danger")
@@ -900,7 +912,6 @@ def complete_appointment(appointment_id):
         flash("Unauthorized!", "danger")
         return redirect("/doctor")
 
-    # create an empty treatment record or keep it minimal (so history exists)
     treatment = Treatment(
         appointment_id=appt.id,
         doctor_id=doctor.id,
@@ -916,7 +927,7 @@ def complete_appointment(appointment_id):
     if slot:
         slot.is_available = True
 
-    # mark appointment completed instead of deleting
+    # mark appointment completed instead of deleting as deleting can make a sequence of errors
     appt.status = "Completed"
 
     db.session.commit()
@@ -958,7 +969,6 @@ def update_appointment(appointment_id):
 
     appt = Appointment.query.get_or_404(appointment_id)
 
-    # doctor validation
     if appt.doctor_id != doctor.id:
         flash("Unauthorized!", "danger")
         return redirect("/doctor")
@@ -967,14 +977,12 @@ def update_appointment(appointment_id):
 
     if request.method == "POST":
 
-        # get form values
         visit_type = request.form.get("visit_type")
         diagnosis = request.form.get("diagnosis")
         tests_done = request.form.get("tests_done")
         prescription = request.form.get("prescription")
         medicines = request.form.get("medicines")
 
-        # create treatment record
         new_treatment = Treatment(
             appointment_id=appt.id,
             doctor_id=doctor.id,
@@ -988,13 +996,12 @@ def update_appointment(appointment_id):
         )
 
         db.session.add(new_treatment)
-        db.session.commit()   # ✅ save treatment first
+        db.session.commit()  
 
 
         flash("Updated Successfully!", "success")
         return redirect("/doctor")
 
-    # GET request -> render form
     return render_template("update_patient_history.html", appointment=appt, patient=patient)
 
 
